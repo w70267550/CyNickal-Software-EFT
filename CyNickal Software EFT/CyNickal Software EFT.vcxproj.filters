@@ -57,6 +57,12 @@
     <ClCompile Include="Game\Classes\CLinkedListEntry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Classes\CEFTPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player List\Player List.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -113,13 +119,16 @@
     <ClInclude Include="Game\Classes\CObjectInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Classes\CLocalGameWorld.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Classes\CPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Classes\CMovementContext.h">
+    <ClInclude Include="Game\Classes\CEFTPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Classes\Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player List\Player List.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

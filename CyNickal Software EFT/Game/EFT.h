@@ -12,7 +12,7 @@ public:
 
 private:
 	static uintptr_t GetLocalGameWorldAddr(DMA_Connection* Conn);
-	static uintptr_t GetGameWorldAddr(DMA_Connection* Conn);
+	static std::vector<uintptr_t> GetGameWorldAddresses(DMA_Connection* Conn);
 	static inline Process Proc{};
 
 private:

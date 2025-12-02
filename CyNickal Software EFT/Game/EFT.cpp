@@ -4,9 +4,9 @@
 #include "Classes/CGameObjectManager.h"
 #include "Classes/CLinkedListEntry.h"
 #include "Classes/CObject.h"
-#include "Classes/CLocalGameWorld.h"
 #include "Classes/CPlayer.h"
-#include "Classes/CMovementContext.h"
+
+#include "Player List/Player List.h"
 
 bool EFT::Initialize(DMA_Connection* Conn)
 {
@@ -41,10 +41,17 @@ bool EFT::Initialize(DMA_Connection* Conn)
 	auto PlayerMovementContextYaw = Proc.ReadMem<float>(Conn, PlayerMovementContext + offsetof(CMovementContext, Yaw));
 	std::println("[EFT] Main Player Yaw: {}", PlayerMovementContextYaw);
 
-	//uintptr_t GameWorldComponent = Proc.ReadMem<uintptr_t>(Conn, GameWorld + 0x58);
-	//uintptr_t UnknownPtr = Proc.ReadMem<uintptr_t>(Conn, GameWorldComponent + 0x18);
-	//uintptr_t Component = Proc.ReadMem<uintptr_t>(Conn, UnknownPtr + 0x30);
-	//std::println("Game World Chain Final: 0x{:X}", Component);
+	PlayerList::m_PlayerAddr.clear();
+	PlayerList::m_PlayerAddr.push_back(MainPlayer);
+	PlayerList::FullUpdate(Conn);
+	PlayerList::PrintPlayers();
+
+	for (int i = 0; i < 100; i++)
+	{
+		PlayerList::QuickUpdate(Conn);
+		PlayerList::PrintPlayers();
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
 
 	return false;
 }
@@ -93,71 +100,40 @@ void EFT::GetObjectAddresses(DMA_Connection* Conn, uint32_t MaxNodes)
 	std::println("[EFT] UpdateObjectList; {} nodes in {}ms", NodeCount, Duration);
 }
 
-struct CNameBuff { char Name[64]{ 0 }; };
-std::vector<std::pair<uintptr_t, DWORD>> ObjectNameAddresses{};
-std::vector< CNameBuff > ObjectNameBuffers{};
-uintptr_t EFT::GetGameWorldAddr(DMA_Connection* Conn)
+std::vector<uintptr_t> EFT::GetGameWorldAddresses(DMA_Connection* Conn)
 {
-	ObjectNameAddresses.resize(m_ObjectAddresses.size());
-	ObjectNameBuffers.resize(m_ObjectAddresses.size());
+	std::vector<uintptr_t> GameWorldAddresses{};
 
-	auto vmsh = VMMDLL_Scatter_Initialize(Conn->GetHandle(), Proc.GetPID(), VMMDLL_FLAG_NOCACHE);
-
-	for (int i = 0; i < m_ObjectAddresses.size(); i++)
+	for (auto& ObjInfo : m_ObjectInfo)
 	{
-		auto& ObjAddr = m_ObjectAddresses[i];
-		uintptr_t NameAddress = ObjAddr + offsetof(CObject, pName);
-		VMMDLL_Scatter_PrepareEx(vmsh, NameAddress, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&ObjectNameAddresses[i].first), &ObjectNameAddresses[i].second);
-	}
-
-	VMMDLL_Scatter_Execute(vmsh);
-
-	VMMDLL_Scatter_Clear(vmsh, Proc.GetPID(), VMMDLL_FLAG_NOCACHE);
-
-	for (int i = 0; i < m_ObjectAddresses.size(); i++)
-	{
-		auto& [NameAddress, BytesRead] = ObjectNameAddresses[i];
-
-		if (BytesRead != sizeof(uintptr_t))
-			continue;
-
-		VMMDLL_Scatter_PrepareEx(vmsh, NameAddress, sizeof(CNameBuff), reinterpret_cast<BYTE*>(&ObjectNameBuffers[i]), &BytesRead);
-	}
-
-	VMMDLL_Scatter_Execute(vmsh);
-	VMMDLL_Scatter_CloseHandle(vmsh);
-
-	uintptr_t GameWorldAddress = 0;
-
-	for (int i = 0; i < m_ObjectAddresses.size(); i++)
-	{
-		if (ObjectNameAddresses[i].second != 64)
-			continue;
-
-		std::string Name(ObjectNameBuffers[i].Name, ObjectNameBuffers[i].Name + 64);
-
-		if (strcmp("GameWorld", ObjectNameBuffers[i].Name) == 0)
+		if (ObjInfo.m_ObjectName == "GameWorld")
 		{
-			GameWorldAddress = m_ObjectAddresses[i];
-			break;
+			std::println("[EFT] GameWorld Address: 0x{:X}", ObjInfo.m_ObjectAddress);
+			GameWorldAddresses.push_back(ObjInfo.m_ObjectAddress);
 		}
 	}
 
-	std::println("[EFT] GameWorld Address: 0x{:X}", GameWorldAddress);
-
-	return GameWorldAddress;
+	return GameWorldAddresses;
 }
+
 uintptr_t EFT::GetLocalGameWorldAddr(DMA_Connection* Conn)
 {
-	auto GameWorldAddr = GetGameWorldAddr(Conn);
+	auto GameWorldAddrs = GetGameWorldAddresses(Conn);
 
-	auto Deref1 = Proc.ReadMem<uintptr_t>(Conn, GameWorldAddr + 0x58);
-	auto Deref2 = Proc.ReadMem<uintptr_t>(Conn, Deref1 + 0x18);
-	auto LocalWorldAddr = Proc.ReadMem<uintptr_t>(Conn, Deref2 + 0x30);
+	for (auto& GameWorldAddr : GameWorldAddrs)
+	{
+		auto Deref1 = Proc.ReadMem<uintptr_t>(Conn, GameWorldAddr + 0x58);
+		auto Deref2 = Proc.ReadMem<uintptr_t>(Conn, Deref1 + 0x18);
+		auto LocalWorldAddr = Proc.ReadMem<uintptr_t>(Conn, Deref2 + 0x30);
+		auto MainPlayerAddr = Proc.ReadMem<uintptr_t>(Conn, LocalWorldAddr + offsetof(CLocalGameWorld, pMainPlayer));
+		if (MainPlayerAddr != 0)
+		{
+			std::println("[EFT] LocalGameWorld Address: 0x{:X}", LocalWorldAddr);
+			return LocalWorldAddr;
+		}
+	}
 
-	std::println("[EFT] LocalGameWorld Address: 0x{:X}", LocalWorldAddr);
-
-	return LocalWorldAddr;
+	throw std::runtime_error("Failed to find valid LocalGameWorld address.");
 }
 
 void EFT::DumpAllObjectsToFile(const std::string& FileName)
