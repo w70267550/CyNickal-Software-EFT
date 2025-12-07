@@ -63,6 +63,7 @@ void CBaseEFTPlayer::PrepareRead_5(VMMDLL_SCATTER_HANDLE vmsh)
 	if (IsInvalid()) return;
 
 	VMMDLL_Scatter_PrepareEx(vmsh, m_BoneArrayAddress + Offsets::CBoneArray::ArrayStart + (0x8 * std::to_underlying(EBoneIndex::Root)), sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HumanRootPtrAddr), nullptr);
+	VMMDLL_Scatter_PrepareEx(vmsh, m_BoneArrayAddress + Offsets::CBoneArray::ArrayStart + (0x8 * std::to_underlying(EBoneIndex::Head)), sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HumanHeadPtrAddr), nullptr);
 }
 
 void CBaseEFTPlayer::PrepareRead_6(VMMDLL_SCATTER_HANDLE vmsh)
@@ -70,6 +71,7 @@ void CBaseEFTPlayer::PrepareRead_6(VMMDLL_SCATTER_HANDLE vmsh)
 	if (IsInvalid()) return;
 
 	VMMDLL_Scatter_PrepareEx(vmsh, m_HumanRootPtrAddr + 0x10, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HumanRootAddr), nullptr);
+	VMMDLL_Scatter_PrepareEx(vmsh, m_HumanHeadPtrAddr + 0x10, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HumanHeadAddr), nullptr);
 }
 
 void CBaseEFTPlayer::PrepareRead_7(VMMDLL_SCATTER_HANDLE vmsh)
@@ -77,10 +79,8 @@ void CBaseEFTPlayer::PrepareRead_7(VMMDLL_SCATTER_HANDLE vmsh)
 	if (IsInvalid()) return;
 
 	m_Transforms.clear();
-
-	/* Bone at index [0] is root */
 	m_Transforms.emplace_back(CUnityTransform(m_HumanRootAddr));
-	//m_Transforms.emplace_back(CUnityTransform(m_HumanHeadPtrAddr));
+	m_Transforms.emplace_back(CUnityTransform(m_HumanHeadAddr));
 
 	for (auto& Transform : m_Transforms)
 		Transform.PrepareRead_1(vmsh);
@@ -116,6 +116,7 @@ void CBaseEFTPlayer::Finalize()
 		return;
 
 	m_RootPosition = m_Transforms[0].GetPosition();
+	m_HeadPos = m_Transforms[1].GetPosition();
 }
 
 void CBaseEFTPlayer::QuickRead(VMMDLL_SCATTER_HANDLE vmsh)
@@ -132,6 +133,7 @@ void CBaseEFTPlayer::QuickFinalize()
 		return;
 
 	m_RootPosition = m_Transforms[0].GetPosition();
+	m_HeadPos = m_Transforms[1].GetPosition();
 }
 
 const bool CBaseEFTPlayer::IsAi() const

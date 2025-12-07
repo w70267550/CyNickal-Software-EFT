@@ -3,9 +3,9 @@
 
 struct VertexEntry
 {
-	__m128 t; 
-	__m128i q; 
-	__m128 s;
+	__m128 Translation;
+	__m128i Quaternion;
+	__m128 Scale;
 };
 
 class CUnityTransform
@@ -17,7 +17,7 @@ private:
 	uintptr_t m_HierarchyAddress{ 0 };
 	uintptr_t m_IndicesAddress{ 0 };
 	uintptr_t m_VerticesAddress{ 0 };
-	uint32_t m_Index{ 0 };
+	int32_t m_Index{ 0 };
 	uint32_t m_Flags{ 0 };
 
 public:

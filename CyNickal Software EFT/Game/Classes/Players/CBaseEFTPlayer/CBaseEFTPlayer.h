@@ -96,6 +96,7 @@ enum class ESpawnType : uint32_t
 enum class EBoneIndex : uint32_t
 {
 	Root = 0,
+	Pelvis = 14,
 	Head = 133
 };
 
@@ -104,6 +105,7 @@ class CBaseEFTPlayer : public CBaseEntity
 public:
 	std::vector<CUnityTransform> m_Transforms{};
 	Vector3 m_RootPosition{};
+	Vector3 m_HeadPos{};
 	float m_Yaw{ 0.0f };
 	EPlayerSide m_Side{ EPlayerSide::UNKNOWN };
 	ESpawnType m_SpawnType{ ESpawnType::UNKNOWN };
@@ -120,6 +122,8 @@ private:
 
 	uintptr_t m_HumanRootPtrAddr{ 0 };
 	uintptr_t m_HumanRootAddr{ 0 };
+	uintptr_t m_HumanHeadPtrAddr{ 0 };
+	uintptr_t m_HumanHeadAddr{ 0 };
 
 public:
 	CBaseEFTPlayer(uintptr_t EntityAddress) : CBaseEntity(EntityAddress) {}

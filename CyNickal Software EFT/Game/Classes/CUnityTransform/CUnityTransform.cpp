@@ -6,7 +6,7 @@
 
 CUnityTransform::CUnityTransform(uintptr_t TransformAddress) : m_TransformAddress(TransformAddress)
 {
-	std::println("[CUnityTransform] Constructed with {0:X}", m_TransformAddress);
+	//std::println("[CUnityTransform] Constructed with {0:X}", m_TransformAddress);
 }
 
 void CUnityTransform::PrepareRead_1(VMMDLL_SCATTER_HANDLE vmsh)
@@ -17,22 +17,20 @@ void CUnityTransform::PrepareRead_1(VMMDLL_SCATTER_HANDLE vmsh)
 
 void CUnityTransform::PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh)
 {
-	std::println("[CUnityTransform] Index {}", m_Index);
-
 	VMMDLL_Scatter_PrepareEx(vmsh, m_HierarchyAddress + Offsets::CTransformHierarchy::pIndices, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_IndicesAddress), nullptr);
 	VMMDLL_Scatter_PrepareEx(vmsh, m_HierarchyAddress + Offsets::CTransformHierarchy::pVertices, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_VerticesAddress), nullptr);
 }
 
 void CUnityTransform::PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh)
 {
-	m_Indices.resize(m_Index + 1);
-	VMMDLL_Scatter_PrepareEx(vmsh, m_IndicesAddress, sizeof(uint32_t) * (m_Index + 1), reinterpret_cast<BYTE*>(m_Indices.data()), nullptr);
+	m_Indices.resize(static_cast<size_t>(m_Index) + 1);
+	VMMDLL_Scatter_PrepareEx(vmsh, m_IndicesAddress, sizeof(uint32_t) * (static_cast<size_t>(m_Index) + 1), reinterpret_cast<BYTE*>(m_Indices.data()), nullptr);
 }
 
 void CUnityTransform::PrepareRead_4(VMMDLL_SCATTER_HANDLE vmsh)
 {
-	m_Vertices.resize(m_Indices[m_Index] + 1);
-	VMMDLL_Scatter_PrepareEx(vmsh, m_VerticesAddress, sizeof(VertexEntry) * (m_Indices[m_Index] + 1), reinterpret_cast<BYTE*>(m_Vertices.data()), nullptr);
+	m_Vertices.resize(static_cast<size_t>(m_Index) + 1);
+	VMMDLL_Scatter_PrepareEx(vmsh, m_VerticesAddress, sizeof(VertexEntry) * (static_cast<size_t>(m_Index) + 1), reinterpret_cast<BYTE*>(m_Vertices.data()), nullptr);
 }
 
 void CUnityTransform::QuickRead(VMMDLL_SCATTER_HANDLE vmsh)
@@ -50,50 +48,58 @@ void CUnityTransform::SetInvalid()
 	m_Flags |= 0x1;
 }
 
+/* THANK YOU https://www.unknowncheats.me/forum/4527852-post13624.html */
 Vector3 CUnityTransform::GetPosition() const
 {
-	auto WorldPos = m_Vertices[m_Index].t;
-	auto IndiciesIndex = m_Indices[m_Index];
+	static constexpr __m128 MulVec1 = { -2.f, 2.f, -2.f, 0.f };
+	static constexpr __m128 MulVec2 = { 2.f, -2.f, -2.f, 0.f };
+	static constexpr __m128 MulVec3 = { -2.f, -2.f, 2.f, 0.f };
 
-	auto& ParentVertex = m_Vertices[IndiciesIndex];
+	__m128 Intermediate = m_Vertices[m_Index].Translation;
+	auto DependencyIndex = m_Indices[m_Index];
 
-	__m128 temp_main = ParentVertex.t;
-	constexpr __m128 xmmword_1410D1340 = { -2.f, 2.f, -2.f, 0.f };
-	constexpr __m128 xmmword_1410D1350 = { 2.f, -2.f, -2.f, 0.f };
-	constexpr __m128 xmmword_1410D1360 = { -2.f, -2.f, 2.f, 0.f };
+	while (DependencyIndex >= 0)
+	{
+		if (static_cast<size_t>(DependencyIndex) >= m_Vertices.size() || static_cast<size_t>(DependencyIndex) >= m_Indices.size())
+			break;
 
-	__m128 v10 = _mm_mul_ps(ParentVertex.s, temp_main);
-	__m128 v11 = _mm_castsi128_ps(_mm_shuffle_epi32(ParentVertex.q, 0));
-	__m128 v12 = _mm_castsi128_ps(_mm_shuffle_epi32(ParentVertex.q, 85));
-	__m128 v13 = _mm_castsi128_ps(_mm_shuffle_epi32(ParentVertex.q, -114));
-	__m128 v14 = _mm_castsi128_ps(_mm_shuffle_epi32(ParentVertex.q, -37));
-	__m128 v15 = _mm_castsi128_ps(_mm_shuffle_epi32(ParentVertex.q, -86));
-	__m128 v16 = _mm_castsi128_ps(_mm_shuffle_epi32(ParentVertex.q, 113));
-	__m128 v17 = _mm_add_ps(
-		_mm_add_ps(
+		VertexEntry m = m_Vertices[DependencyIndex];
+
+		__m128 v10 = _mm_mul_ps(m.Scale, Intermediate);
+		__m128 v11 = _mm_castsi128_ps(_mm_shuffle_epi32(m.Quaternion, 0));
+		__m128 v12 = _mm_castsi128_ps(_mm_shuffle_epi32(m.Quaternion, 85));
+		__m128 v13 = _mm_castsi128_ps(_mm_shuffle_epi32(m.Quaternion, -114));
+		__m128 v14 = _mm_castsi128_ps(_mm_shuffle_epi32(m.Quaternion, -37));
+		__m128 v15 = _mm_castsi128_ps(_mm_shuffle_epi32(m.Quaternion, -86));
+		__m128 v16 = _mm_castsi128_ps(_mm_shuffle_epi32(m.Quaternion, 113));
+		__m128 v17 = _mm_add_ps(
 			_mm_add_ps(
-				_mm_mul_ps(
-					_mm_sub_ps(
-						_mm_mul_ps(_mm_mul_ps(v11, xmmword_1410D1350), v13),
-						_mm_mul_ps(_mm_mul_ps(v12, xmmword_1410D1360), v14)),
-					_mm_castsi128_ps(_mm_shuffle_epi32(_mm_castps_si128(v10), -86))),
-				_mm_mul_ps(
-					_mm_sub_ps(
-						_mm_mul_ps(_mm_mul_ps(v15, xmmword_1410D1360), v14),
-						_mm_mul_ps(_mm_mul_ps(v11, xmmword_1410D1340), v16)),
-					_mm_castsi128_ps(_mm_shuffle_epi32(_mm_castps_si128(v10), 85)))),
-			_mm_add_ps(
-				_mm_mul_ps(
-					_mm_sub_ps(
-						_mm_mul_ps(_mm_mul_ps(v12, xmmword_1410D1340), v16),
-						_mm_mul_ps(_mm_mul_ps(v15, xmmword_1410D1350), v13)),
-					_mm_castsi128_ps(_mm_shuffle_epi32(_mm_castps_si128(v10), 0))),
-				v10)),
-		ParentVertex.t);
+				_mm_add_ps(
+					_mm_mul_ps(
+						_mm_sub_ps(
+							_mm_mul_ps(_mm_mul_ps(v11, MulVec2), v13),
+							_mm_mul_ps(_mm_mul_ps(v12, MulVec3), v14)),
+						_mm_castsi128_ps(_mm_shuffle_epi32(_mm_castps_si128(v10), -86))),
+					_mm_mul_ps(
+						_mm_sub_ps(
+							_mm_mul_ps(_mm_mul_ps(v15, MulVec3), v14),
+							_mm_mul_ps(_mm_mul_ps(v11, MulVec1), v16)),
+						_mm_castsi128_ps(_mm_shuffle_epi32(_mm_castps_si128(v10), 85)))),
+				_mm_add_ps(
+					_mm_mul_ps(
+						_mm_sub_ps(
+							_mm_mul_ps(_mm_mul_ps(v12, MulVec1), v16),
+							_mm_mul_ps(_mm_mul_ps(v15, MulVec2), v13)),
+						_mm_castsi128_ps(_mm_shuffle_epi32(_mm_castps_si128(v10), 0))),
+					v10)),
+			m.Translation);
 
-	Vector3 Result = *reinterpret_cast<Vector3*>(&temp_main);
+		Intermediate = v17;
 
-	return Result;
+		DependencyIndex = m_Indices[DependencyIndex];
+	}
+
+	return *reinterpret_cast<Vector3*>(&Intermediate);
 }
 
 void CUnityTransform::Print()

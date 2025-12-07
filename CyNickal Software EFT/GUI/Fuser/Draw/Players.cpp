@@ -31,7 +31,7 @@ void DrawTextAtPosition(ImDrawList* DrawList, const ImVec2& Position, const ImCo
 	);
 }
 
-void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, ImDrawList* DrawList)
+void DrawESPPlayers::Draw(const CBaseEFTPlayer& Player, const ImVec2& WindowPos, ImDrawList* DrawList)
 {
 	if (Player.IsInvalid())	return;
 
@@ -46,21 +46,13 @@ void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, 
 		Player.GetSideColor(),
 		Text
 	);
-}
 
-void DrawESPPlayers::Draw(const CObservedPlayer& Player, const ImVec2& WindowPos, ImDrawList* DrawList)
-{
-	if (Player.IsInvalid())	return;
-
-	Vector2 ScreenPos{};
-	if (!Camera::WorldToScreen(Player.m_RootPosition, ScreenPos)) return;
-
-	std::string Text = std::format("{0:s} [{1:.0f}m]", Player.GetBaseName(), Player.m_RootPosition.DistanceTo(m_LatestLocalPlayerPos));
-
-	DrawTextAtPosition(
-		DrawList,
+	if (!Camera::WorldToScreen(Player.m_HeadPos, ScreenPos)) return;
+	DrawList->AddCircle(
 		ImVec2(WindowPos.x + ScreenPos.x, WindowPos.y + ScreenPos.y),
+		5.0f,
 		Player.GetSideColor(),
-		Text
+		12,
+		2.0f
 	);
 }
