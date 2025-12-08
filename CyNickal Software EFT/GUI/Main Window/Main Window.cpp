@@ -3,9 +3,11 @@
 #include "Main Window.h"
 
 #include "GUI/Fonts/Fonts.h"
+#include "GUI/Main Menu/Main Menu.h"
 #include "GUI/Radar/Radar.h"
 #include "GUI/Fuser/Fuser.h"
 #include "GUI/Player Table/Player Table.h"
+#include "GUI/Loot Table/Loot Table.h"
 #include "GUI/Color Picker/Color Picker.h"
 
 void Render(ImGuiContext* ctx)
@@ -24,7 +26,9 @@ void Render(ImGuiContext* ctx)
 	Fuser::Render();
 	Fuser::RenderSettings();
 	PlayerTable::Render();
+	LootTable::Render();
 	ColorPicker::Render();
+	MainMenu::Render();
 
 	ImGui::PopFont();
 }

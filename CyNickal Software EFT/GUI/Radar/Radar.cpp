@@ -5,7 +5,9 @@
 
 void Radar::Render()
 {
-	ImGui::Begin("Radar");
+	if (!bMasterToggle) return;
+
+	ImGui::Begin("Radar", &bMasterToggle);
 
 	auto WindowPos = ImGui::GetWindowPos();
 	auto WindowSize = ImGui::GetWindowSize();
@@ -24,8 +26,11 @@ void Radar::Render()
 
 void Radar::RenderSettings()
 {
-	ImGui::Begin("Radar Settings");
+	if (!bSettings) return;
 
+	ImGui::Begin("Radar Settings", &bSettings);
+
+	ImGui::Checkbox("Master Toggle", &bMasterToggle);
 	ImGui::SliderFloat("Scale", &Radar::fScale, 0.1f, 5.0f, "%.1f");
 	ImGui::SliderFloat("Local View Ray Length", &Radar::fLocalViewRayLength, 10.0f, 500.0f, "%.1f");
 	ImGui::SliderFloat("Other View Ray Length", &Radar::fOtherViewRayLength, 10.0f, 500.0f, "%.1f");

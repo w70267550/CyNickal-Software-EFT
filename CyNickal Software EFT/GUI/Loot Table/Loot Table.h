@@ -1,12 +1,11 @@
 #pragma once
 
-class Fuser
+class LootTable
 {
 public:
 	static void Render();
-	static void RenderSettings();
 
 public:
 	static inline bool bMasterToggle{ true };
-	static inline bool bSettings{ true };
+	static inline ImGuiTextFilter m_LootFilter{};
 };

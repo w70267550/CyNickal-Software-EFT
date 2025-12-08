@@ -4,7 +4,10 @@
 
 void PlayerTable::Render()
 {
-	ImGui::Begin("Player Table");
+	if (!bMasterToggle)
+		return;
+
+	ImGui::Begin("Player Table", &bMasterToggle);
 
 	if (ImGui::BeginTable("##Players", 6))
 	{

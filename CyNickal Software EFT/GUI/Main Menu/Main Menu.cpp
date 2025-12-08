@@ -1,0 +1,21 @@
+#include "pch.h"
+#include "Main Menu.h"
+
+#include "GUI/Color Picker/Color Picker.h"
+#include "GUI/Player Table/Player Table.h"
+#include "GUI/Loot Table/Loot Table.h"
+#include "GUI/Fuser/Fuser.h"
+#include "GUI/Radar/Radar.h"
+
+void MainMenu::Render()
+{
+	ImGui::Begin("Main Menu");
+
+	ImGui::Checkbox("Fuser Settings", &Fuser::bSettings);
+	ImGui::Checkbox("Radar Setting", &Radar::bSettings);
+	ImGui::Checkbox("Color Picker", &ColorPicker::bMasterToggle);
+	ImGui::Checkbox("Player Table", &PlayerTable::bMasterToggle);
+	ImGui::Checkbox("Loot Table", &LootTable::bMasterToggle);
+
+	ImGui::End();
+}

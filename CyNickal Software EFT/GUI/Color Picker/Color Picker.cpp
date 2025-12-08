@@ -4,7 +4,9 @@
 
 void ColorPicker::Render()
 {
-	ImGui::Begin("Color Picker");
+	if (!bMasterToggle)	return;
+
+	ImGui::Begin("Color Picker", &bMasterToggle);
 
 	MyColorPicker("PMC Color", m_PMCColor);
 	MyColorPicker("Scav Color", m_ScavColor);

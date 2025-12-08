@@ -5,6 +5,8 @@
 
 void Fuser::Render()
 {
+	if (!bMasterToggle) return;
+
 	ImGui::SetNextWindowSize({ 1920,1080 });
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 255.0f));
 	ImGui::Begin("Fuser", nullptr, ImGuiWindowFlags_NoDecoration);
@@ -20,7 +22,9 @@ void Fuser::Render()
 
 void Fuser::RenderSettings()
 {
-	ImGui::Begin("Fuser Settings");
+	if (!bSettings) return;
+
+	ImGui::Begin("Fuser Settings", &bSettings);
 	ImGui::Checkbox("Player Names", &DrawESPPlayers::bNameText);
 	ImGui::Checkbox("Player Skeletons", &DrawESPPlayers::bSkeleton);
 	ImGui::Checkbox("Player Head Dots", &DrawESPPlayers::bHeadDot);
