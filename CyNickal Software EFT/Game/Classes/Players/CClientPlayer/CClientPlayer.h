@@ -3,7 +3,7 @@
 
 class CClientPlayer : public CBaseEFTPlayer
 {
-public:
+private:
 	uintptr_t m_MovementContextAddress{ 0 };
 	uintptr_t m_ProfileAddress{ 0 };
 	uintptr_t m_ProfileInfoAddress{ 0 };

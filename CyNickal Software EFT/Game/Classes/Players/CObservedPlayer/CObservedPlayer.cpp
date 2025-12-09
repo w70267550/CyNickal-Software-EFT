@@ -22,6 +22,7 @@ void CObservedPlayer::PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh)
 		return;
 
 	VMMDLL_Scatter_PrepareEx(vmsh, m_PlayerControllerAddress + Offsets::CObservedPlayerController::pMovementController, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_MovementControllerAddress), nullptr);
+	VMMDLL_Scatter_PrepareEx(vmsh, m_PlayerControllerAddress + Offsets::CObservedPlayerController::pHealthController, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HealthControllerAddress), nullptr);
 	VMMDLL_Scatter_PrepareEx(vmsh, m_VoiceAddress + 0x14, sizeof(m_wVoice), reinterpret_cast<BYTE*>(&m_wVoice), nullptr);
 }
 
@@ -33,6 +34,7 @@ void CObservedPlayer::PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh)
 		return;
 
 	VMMDLL_Scatter_PrepareEx(vmsh, m_MovementControllerAddress + Offsets::CMovementController::pObservedPlayerState, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_ObservedMovementStateAddress), nullptr);
+	VMMDLL_Scatter_PrepareEx(vmsh, m_HealthControllerAddress + Offsets::CHealthController::HealthStatus, sizeof(uint32_t), reinterpret_cast<BYTE*>(&m_TagStatus), nullptr);
 }
 
 void CObservedPlayer::PrepareRead_4(VMMDLL_SCATTER_HANDLE vmsh)
@@ -64,6 +66,19 @@ void CObservedPlayer::QuickRead(VMMDLL_SCATTER_HANDLE vmsh)
 		return;
 
 	VMMDLL_Scatter_PrepareEx(vmsh, m_ObservedMovementStateAddress + Offsets::CObservedMovementState::Rotation, sizeof(float), reinterpret_cast<BYTE*>(&m_Yaw), nullptr);
+	VMMDLL_Scatter_PrepareEx(vmsh, m_HealthControllerAddress + Offsets::CHealthController::HealthStatus, sizeof(uint32_t), reinterpret_cast<BYTE*>(&m_TagStatus), nullptr);
+}
+
+const bool CObservedPlayer::IsInCondition(const ETagStatus status) const
+{
+	std::bitset<32> statusBits(m_TagStatus);
+
+	return statusBits.test(std::to_underlying(status));
+}
+
+const bool CObservedPlayer::IsInCriticalHealthStatus() const
+{
+	return IsInCondition(ETagStatus::Injured) || IsInCondition(ETagStatus::BadlyInjured) || IsInCondition(ETagStatus::Dying);
 }
 
 void CObservedPlayer::SetSpawnTypeFromVoice()

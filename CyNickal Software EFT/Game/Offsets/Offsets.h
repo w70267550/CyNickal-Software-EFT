@@ -107,6 +107,7 @@ namespace Offsets
 	namespace CObservedPlayerController
 	{
 		inline constexpr std::ptrdiff_t pMovementController{ 0xD8 };
+		inline constexpr std::ptrdiff_t pHealthController{ 0xE8 };
 	}
 	namespace CAIData
 	{
@@ -146,5 +147,9 @@ namespace Offsets
 	{
 		inline constexpr std::ptrdiff_t pComponents{ 0x58 };
 		inline constexpr std::ptrdiff_t pName{ 0x88 };
+	}
+	namespace CHealthController
+	{
+		inline constexpr std::ptrdiff_t HealthStatus{ 0x10 };
 	}
 };

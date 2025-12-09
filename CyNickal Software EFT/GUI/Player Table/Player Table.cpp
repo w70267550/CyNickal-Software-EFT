@@ -9,7 +9,7 @@ void PlayerTable::Render()
 
 	ImGui::Begin("Player Table", &bMasterToggle);
 
-	if (ImGui::BeginTable("##Players", 7))
+	if (ImGui::BeginTable("##Players", 8))
 	{
 		ImGui::TableSetupColumn("Address");
 		ImGui::TableSetupColumn("Position");
@@ -18,6 +18,7 @@ void PlayerTable::Render()
 		ImGui::TableSetupColumn("Spawn Type");
 		ImGui::TableSetupColumn("Voice");
 		ImGui::TableSetupColumn("Local Player?");
+		ImGui::TableSetupColumn("Tag Status");
 		ImGui::TableHeadersRow();
 
 		std::scoped_lock Lock(PlayerList::m_PlayerMutex);
@@ -50,6 +51,8 @@ void PlayerTable::AddRow(const CClientPlayer& Player)
 	ImGui::Text("N/A");
 	ImGui::TableNextColumn();
 	ImGui::Text("%d", (Player.IsLocalPlayer()) ? 1 : 0);
+	ImGui::TableNextColumn();
+	ImGui::Text("N/A");
 }
 
 void PlayerTable::AddRow(const CObservedPlayer& Player)
@@ -61,7 +64,8 @@ void PlayerTable::AddRow(const CObservedPlayer& Player)
 	ImGui::TableNextColumn();
 	ImGui::Text("0x%llX", Player.m_EntityAddress);
 	ImGui::TableNextColumn();
-	ImGui::Text("%.2f, %.2f, %.2f", Player.GetBonePosition(EBoneIndex::Root).x, Player.GetBonePosition(EBoneIndex::Root).y, Player.GetBonePosition(EBoneIndex::Root).z);
+	auto& RootPos = Player.GetBonePosition(EBoneIndex::Root);
+	ImGui::Text("%.2f, %.2f, %.2f", RootPos.x, RootPos.y, RootPos.z);
 	ImGui::TableNextColumn();
 	ImGui::Text("%.2f", Player.m_Yaw);
 	ImGui::TableNextColumn();
@@ -72,4 +76,6 @@ void PlayerTable::AddRow(const CObservedPlayer& Player)
 	ImGui::Text("%s", Player.m_Voice);
 	ImGui::TableNextColumn();
 	ImGui::Text("N/A");
+	ImGui::TableNextColumn();
+	ImGui::Text("%X", Player.m_TagStatus);
 }
