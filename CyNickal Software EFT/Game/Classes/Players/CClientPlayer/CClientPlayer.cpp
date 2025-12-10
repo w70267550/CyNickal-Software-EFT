@@ -94,7 +94,7 @@ void CClientPlayer::QuickFinalize()
 	if (IsInvalid())
 		return;
 
-	if (m_HandsControllerAddress = m_PreviousHandsControllerAddress) return;
+	if (m_HandsControllerAddress == m_PreviousHandsControllerAddress) return;
 
 	m_PreviousHandsControllerAddress = m_HandsControllerAddress;
 	m_pHands = std::make_unique<CHeldItem>(m_HandsControllerAddress);

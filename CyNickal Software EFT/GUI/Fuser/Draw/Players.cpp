@@ -62,12 +62,12 @@ void DrawESPPlayers::DrawPlayerWeapon(const CHeldItem* pHands, const ImVec2& Win
 
 	if (pHands->IsInvalid()) return;
 
-	auto TextSize = ImGui::CalcTextSize(pHands->m_HeldItem.GetItemName());
+	auto TextSize = ImGui::CalcTextSize(pHands->m_HeldItem.GetSanitizedName());
 	auto& ProjectedRootPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
 	DrawList->AddText(
 		ImVec2(WindowPos.x + ProjectedRootPos.x - (TextSize.x / 2.0f), WindowPos.y + ProjectedRootPos.y + (ImGui::GetTextLineHeight() * LineNumber)),
 		ImColor(255, 255, 255, 255),
-		pHands->m_HeldItem.GetItemName()
+		pHands->m_HeldItem.GetSanitizedName()
 	);
 	LineNumber++;
 }

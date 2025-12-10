@@ -9,9 +9,10 @@ void PlayerTable::Render()
 
 	ImGui::Begin("Player Table", &bMasterToggle);
 
-	if (ImGui::BeginTable("##Players", 10))
+	if (ImGui::BeginTable("##Players", 12))
 	{
 		ImGui::TableSetupColumn("Address");
+		ImGui::TableSetupColumn("Copy Addr");
 		ImGui::TableSetupColumn("Position");
 		ImGui::TableSetupColumn("Yaw");
 		ImGui::TableSetupColumn("Side");
@@ -20,7 +21,8 @@ void PlayerTable::Render()
 		ImGui::TableSetupColumn("Local Player?");
 		ImGui::TableSetupColumn("Tag Status");
 		ImGui::TableSetupColumn("Weapon");
-		ImGui::TableSetupColumn("Copy");
+		ImGui::TableSetupColumn("Sanitized Weapon");
+		ImGui::TableSetupColumn("Copy JOAAT");
 		ImGui::TableHeadersRow();
 
 		std::scoped_lock Lock(PlayerList::m_PlayerMutex);
@@ -42,6 +44,9 @@ void PlayerTable::AddRow(const CClientPlayer& Player)
 	ImGui::TableNextColumn();
 	ImGui::Text("0x%llX", Player.m_EntityAddress);
 	ImGui::TableNextColumn();
+	std::string Copy = "Copy##" + std::to_string(Player.m_EntityAddress);
+	if (ImGui::Button(Copy.c_str())) ImGui::SetClipboardText(std::to_string(Player.m_EntityAddress).c_str());
+	ImGui::TableNextColumn();
 	auto& RootPos = Player.GetBonePosition(EBoneIndex::Root);
 	ImGui::Text("%.2f, %.2f, %.2f", RootPos.x, RootPos.y, RootPos.z);
 	ImGui::TableNextColumn();
@@ -57,10 +62,12 @@ void PlayerTable::AddRow(const CClientPlayer& Player)
 	ImGui::TableNextColumn();
 	ImGui::Text("N/A");
 	ImGui::TableNextColumn();
-	ImGui::Text((Player.m_pHands) ? Player.m_pHands->m_HeldItem.GetItemName() : "N/A");
+	ImGui::Text((Player.m_pHands) ? Player.m_pHands->m_HeldItem.GetUnfilteredName() : "N/A");
 	ImGui::TableNextColumn();
-	std::string Copy = "Copy##" + std::to_string(Player.m_EntityAddress);
-	if (ImGui::Button(Copy.c_str())) ImGui::SetClipboardText(std::to_string(Player.m_EntityAddress).c_str());
+	ImGui::Text((Player.m_pHands) ? Player.m_pHands->m_HeldItem.GetSanitizedName() : "N/A");
+	ImGui::TableNextColumn();
+	std::string JOAAT = "JOAAT##" + std::to_string(Player.m_EntityAddress);
+	if (ImGui::Button(JOAAT.c_str())) ImGui::SetClipboardText(std::format("0x{0:X}", Player.m_pHands->m_HeldItem.m_ItemHash.GetHash()).c_str());
 }
 
 void PlayerTable::AddRow(const CObservedPlayer& Player)
@@ -71,6 +78,9 @@ void PlayerTable::AddRow(const CObservedPlayer& Player)
 	ImGui::TableNextRow();
 	ImGui::TableNextColumn();
 	ImGui::Text("0x%llX", Player.m_EntityAddress);
+	ImGui::TableNextColumn();
+	std::string Copy = "Copy##" + std::to_string(Player.m_EntityAddress);
+	if (ImGui::Button(Copy.c_str())) ImGui::SetClipboardText(std::to_string(Player.m_EntityAddress).c_str());
 	ImGui::TableNextColumn();
 	auto& RootPos = Player.GetBonePosition(EBoneIndex::Root);
 	ImGui::Text("%.2f, %.2f, %.2f", RootPos.x, RootPos.y, RootPos.z);
@@ -87,8 +97,10 @@ void PlayerTable::AddRow(const CObservedPlayer& Player)
 	ImGui::TableNextColumn();
 	ImGui::Text("%X", Player.m_TagStatus);
 	ImGui::TableNextColumn();
-	ImGui::Text((Player.m_pHands) ? Player.m_pHands->m_HeldItem.GetItemName() : "N/A");
+	ImGui::Text((Player.m_pHands) ? Player.m_pHands->m_HeldItem.GetUnfilteredName() : "N/A");
 	ImGui::TableNextColumn();
-	std::string Copy = "Copy##" + std::to_string(Player.m_EntityAddress);
-	if (ImGui::Button(Copy.c_str())) ImGui::SetClipboardText(std::to_string(Player.m_EntityAddress).c_str());
+	ImGui::Text((Player.m_pHands) ? Player.m_pHands->m_HeldItem.GetSanitizedName() : "N/A");
+	ImGui::TableNextColumn();
+	std::string JOAAT = "JOAAT##" + std::to_string(Player.m_EntityAddress);
+	if (ImGui::Button(JOAAT.c_str())) ImGui::SetClipboardText(std::format("0x{0:X}", Player.m_pHands->m_HeldItem.m_ItemHash.GetHash()).c_str());
 }

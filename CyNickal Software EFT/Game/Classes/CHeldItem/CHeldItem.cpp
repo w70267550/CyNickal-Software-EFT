@@ -4,7 +4,7 @@
 #include "DMA/DMA.h"
 #include "Game/EFT.h"
 
-CHeldItem::CHeldItem(uintptr_t EntityAddress) : CBaseEntity(EntityAddress){}
+CHeldItem::CHeldItem(uintptr_t EntityAddress) : CBaseEntity(EntityAddress) {}
 
 void CHeldItem::PrepareRead_1(VMMDLL_SCATTER_HANDLE vmsh, EPlayerType PlayerType)
 {
@@ -30,6 +30,9 @@ void CHeldItem::PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh)
 
 void CHeldItem::PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh)
 {
+	if (m_HeldItem.IsInvalid())
+		SetInvalid();
+
 	if (IsInvalid()) return;
 
 	m_HeldItem.PrepareRead_2(vmsh);
@@ -37,6 +40,9 @@ void CHeldItem::PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh)
 
 void CHeldItem::PrepareRead_4(VMMDLL_SCATTER_HANDLE vmsh)
 {
+	if (m_HeldItem.IsInvalid())
+		SetInvalid();
+
 	if (IsInvalid()) return;
 
 	m_HeldItem.PrepareRead_3(vmsh);
@@ -44,6 +50,8 @@ void CHeldItem::PrepareRead_4(VMMDLL_SCATTER_HANDLE vmsh)
 
 void CHeldItem::QuickRead(VMMDLL_SCATTER_HANDLE vmsh, EPlayerType PlayerType)
 {
+	if (IsInvalid()) return;
+
 	if (PlayerType == EPlayerType::eMainPlayer)
 		VMMDLL_Scatter_PrepareEx(vmsh, m_EntityAddress + Offsets::CHandsController::pItem, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HeldItemAddress), reinterpret_cast<DWORD*>(&m_BytesRead));
 	else if (PlayerType == EPlayerType::eObservedPlayer)
@@ -52,6 +60,9 @@ void CHeldItem::QuickRead(VMMDLL_SCATTER_HANDLE vmsh, EPlayerType PlayerType)
 
 void CHeldItem::Finalize()
 {
+	if (m_HeldItem.IsInvalid())
+		SetInvalid();
+
 	if (IsInvalid()) return;
 
 	m_HeldItem.Finalize();
@@ -59,6 +70,11 @@ void CHeldItem::Finalize()
 
 void CHeldItem::QuickFinalize()
 {
+	if (m_BytesRead != sizeof(uintptr_t))
+		SetInvalid();
+
+	if (IsInvalid()) return;
+
 	if (m_HeldItemAddress == m_PreviousHeldItemAddress)
 		return;
 
@@ -67,7 +83,7 @@ void CHeldItem::QuickFinalize()
 	m_HeldItem = CItem(m_HeldItemAddress);
 	m_HeldItem.CompleteUpdate();
 
-	std::println("[CHeldItem] Switched to {}", m_HeldItem.GetItemName());
+	std::println("[CHeldItem] Switched to {}", m_HeldItem.GetUnfilteredName());
 }
 
 void CHeldItem::CompleteUpdate(EPlayerType PlayerType)

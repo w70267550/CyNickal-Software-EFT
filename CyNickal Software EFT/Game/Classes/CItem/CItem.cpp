@@ -39,6 +39,7 @@ void CItem::PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh)
 
 	if (IsInvalid()) return;
 
+	m_wItemNameBuffer.fill(0);
 	VMMDLL_Scatter_PrepareEx(vmsh, m_ItemTemplateNameAddress + 0x14, sizeof(m_wItemNameBuffer), reinterpret_cast<BYTE*>(&m_wItemNameBuffer), reinterpret_cast<DWORD*>(&m_BytesRead));
 }
 
@@ -64,6 +65,23 @@ void CItem::CompleteUpdate()
 	Finalize();
 }
 
+template <typename T>
+uint32_t JOAAT(T String) {
+	size_t i = 0;
+	uint32_t hash = 0;
+	while (i != String.size()) {
+		hash += String[i++];
+		hash += hash << 10;
+		hash ^= hash >> 6;
+	}
+	hash += hash << 3;
+	hash ^= hash >> 11;
+	hash += hash << 15;
+	return hash;
+}
+
+#include "Database/Database.h"
+std::string BuiltName{};
 void CItem::Finalize()
 {
 	if (m_BytesRead != sizeof(m_wItemNameBuffer))
@@ -74,5 +92,17 @@ void CItem::Finalize()
 	for (int i = 0; i < 32; i++)
 		m_ItemNameBuffer[i] = static_cast<char>(m_wItemNameBuffer[i]);
 
-	std::println("[CItem] Finalized {0:X} as {1:s}", m_EntityAddress, m_ItemNameBuffer.data());
+	BuiltName.clear();
+	BuiltName = std::string(m_ItemNameBuffer.data(),32);
+	m_ItemHash = CItemHash(BuiltName);
+}
+
+const char* CItem::GetUnfilteredName() const
+{
+	return m_ItemNameBuffer.data();
+}
+
+const char* CItem::GetSanitizedName() const
+{
+	return m_ItemHash.GetName().c_str();
 }
