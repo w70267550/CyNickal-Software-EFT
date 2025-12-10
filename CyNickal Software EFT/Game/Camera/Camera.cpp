@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Game/EFT.h"
 #include "Game/Offsets/Offsets.h"
+#include "GUI/Fuser/Fuser.h"
 
 Matrix44 TransposeMatrix(const Matrix44& Mat)
 {
@@ -51,13 +52,10 @@ bool Camera::WorldToScreen(Vector3 WorldPosition, Vector2& ScreenPosition)
 	float y = DotProduct(WorldPosition, Up) + Transposed.M[1][3];
 	float x = DotProduct(WorldPosition, Right) + Transposed.M[0][3];
 
-	constexpr float Width = 1920.0f;
-	constexpr float Height = 1080.0f;
-	constexpr float HalfWidth = Width * 0.5f;
-	constexpr float HalfHeight = Height * 0.5f;
+	auto CenterScreen = Fuser::GetCenterScreen();
 
-	ScreenPosition.x = (HalfWidth) * (1.f + x / w);
-	ScreenPosition.y = (HalfHeight) * (1.f - y / w);
+	ScreenPosition.x = (CenterScreen.x) * (1.f + x / w);
+	ScreenPosition.y = (CenterScreen.y) * (1.f - y / w);
 
 	return true;
 }

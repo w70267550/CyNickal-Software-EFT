@@ -16,9 +16,11 @@ void Aimbot::RenderSettings()
 	else
 		ImGui::Text("Makcu Device Connected: %s", m_Device.getDeviceInfo().port.c_str());
 
+	ImGui::Checkbox("Master Toggle", &bMasterToggle);
+	ImGui::Checkbox("Draw FOV Circle", &bDrawFOV);
 	ImGui::SliderFloat("Dampen", &fDampen, 0.01f, 1.0f);
-	ImGui::SliderFloat("FOV", &fPixelFOV, 10.0f, 300.0f);
-	ImGui::SliderFloat("Deadzone FOV", &fDeadzoneFov, 10.0f, 300.0f);
+	ImGui::SliderFloat("FOV", &fPixelFOV, 1.0f, 300.0f);
+	ImGui::SliderFloat("Deadzone FOV", &fDeadzoneFov, 1.0f, 10.0f);
 	ImGui::InputScalar("Keybind", ImGuiDataType_U32, &m_Keybind);
 
 	ImGui::End();
@@ -26,6 +28,8 @@ void Aimbot::RenderSettings()
 
 void Aimbot::RenderFOVCircle(const ImVec2& WindowPos, ImDrawList* DrawList)
 {
+	if (!bMasterToggle || !bDrawFOV) return;
+
 	auto WindowSize = ImGui::GetWindowSize();
 	auto Center = ImVec2(WindowPos.x + WindowSize.x / 2.0f, WindowPos.y + WindowSize.y / 2.0f);
 	DrawList->AddCircle(Center, fPixelFOV, IM_COL32(255, 255, 255, 255), 100, 2.0f);
@@ -50,6 +54,8 @@ float Distance(ImVec2 a, ImVec2 b)
 }
 void Aimbot::OnDMAFrame(DMA_Connection* Conn)
 {
+	if (bMasterToggle) return;
+
 	if (c_keys::IsInitialized() == false || m_Device.isConnected() == false) return;
 
 	if (c_keys::IsKeyDown(Conn, m_Keybind) == false) return;

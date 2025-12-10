@@ -8,7 +8,7 @@ void Fuser::Render()
 {
 	if (!bMasterToggle) return;
 
-	ImGui::SetNextWindowSize({ 1920,1080 });
+	ImGui::SetNextWindowSize(Fuser::m_ScreenSize);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 255.0f));
 	ImGui::Begin("Fuser", nullptr, ImGuiWindowFlags_NoDecoration);
 	auto WindowPos = ImGui::GetWindowPos();
