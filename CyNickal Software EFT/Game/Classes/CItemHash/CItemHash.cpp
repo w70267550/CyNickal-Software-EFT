@@ -77,11 +77,28 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0xE80284D2, "Salewa"},
 	{0xCA057ECE, "PSU"},
 	{0xD2D7055D, "Emelya"},
+	{0x6F1A0D0B, "Energy Drink"},
+	{0xDDCFFAD3, "AA Batteries"},
+	{0x4F7BA371, "Drill"},
+	{0x772D13F3, "Toothpaste"},
+	{0x70469D50, "Chlorine"},
 
 	/* Containers */
 	{0x1D2E27D9, "PC Block"},
 	{0x1D3ADFCA, "Toolbox"},
 	{0xD328FEF6, "Sportbag"},
+	{0xB3E04EE3, "Jacket"},
+	{0x2C865C85, "Jacket"},
+	{0x9082B9FB, "Jacket"},
+	{0xAC53E66B, "Jacket"},
+	{0x19BE107F, "Filing Cabinet"},
+	{0xF8CFC1D, "Filing Cabinet"},
+	{0x1365F70, "Filing Cabinet"},
+	{0x37154B39, "Filing Cabinet"},
+	{0x8F9E34D, "Static Corpse"},
+	{0xFE8849CF, "Static Corpse"},
+	{0x71DF944E, "Static Corpse"},
+	{0x3B201746, "Static Corpse"},
 };
 
 const std::unordered_map<uint32_t, std::string> gValuables

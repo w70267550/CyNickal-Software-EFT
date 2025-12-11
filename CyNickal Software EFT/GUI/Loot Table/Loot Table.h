@@ -7,5 +7,6 @@ public:
 
 public:
 	static inline bool bMasterToggle{ true };
+	static inline bool bValuableOnly{ false };
 	static inline ImGuiTextFilter m_LootFilter{};
 };

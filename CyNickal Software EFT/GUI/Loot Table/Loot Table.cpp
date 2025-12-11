@@ -10,6 +10,7 @@ void LootTable::Render()
 	ImGui::Begin("Loot Table", &bMasterToggle);
 
 	m_LootFilter.Draw("##LootTableFilter", -FLT_MIN);
+	ImGui::Checkbox("Valuable Items Only", &bValuableOnly);
 
 	ImGuiTableFlags TableFlags = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_NoHostExtendX | ImGuiTableFlags_NoBordersInBody;
 	if (ImGui::BeginTable("#LootTable", 5, TableFlags))
@@ -28,6 +29,9 @@ void LootTable::Render()
 		for (auto& Loot : LootList::m_LootList)
 		{
 			if (Loot.IsInvalid()) continue;
+
+			if (bValuableOnly && !Loot.IsValuable())
+				continue;
 
 			if (m_LootFilter.IsActive() && !m_LootFilter.PassFilter(Loot.m_Name.data()))
 				continue;
