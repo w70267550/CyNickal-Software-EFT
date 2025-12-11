@@ -10,6 +10,7 @@ void Fuser::Render()
 
 	ImGui::SetNextWindowSize(Fuser::m_ScreenSize);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 255.0f));
+	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 	ImGui::Begin("Fuser", nullptr, ImGuiWindowFlags_NoDecoration);
 	auto WindowPos = ImGui::GetWindowPos();
 	auto DrawList = ImGui::GetWindowDrawList();
@@ -24,9 +25,7 @@ void Fuser::Render()
 
 void Fuser::RenderSettings()
 {
-	if (!bSettings) return;
-
-	ImGui::Begin("Fuser Settings", &bSettings);
+	ImGui::Checkbox("Master Toggle", &bMasterToggle);
 	ImGui::Checkbox("Player Names", &DrawESPPlayers::bNameText);
 	ImGui::Checkbox("Player Skeletons", &DrawESPPlayers::bSkeleton);
 	ImGui::Checkbox("Player Head Dots", &DrawESPPlayers::bHeadDot);
@@ -35,7 +34,6 @@ void Fuser::RenderSettings()
 	DrawESPLoot::m_LootFilter.Draw("Loot Filter");
 	ImGui::InputFloat("Screen Width", &Fuser::m_ScreenSize.x);
 	ImGui::InputFloat("Screen Height", &Fuser::m_ScreenSize.y);
-	ImGui::End();
 }
 
 ImVec2 Fuser::GetCenterScreen()

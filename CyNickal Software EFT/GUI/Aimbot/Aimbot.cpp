@@ -7,16 +7,20 @@
 
 void Aimbot::RenderSettings()
 {
-	if (!bSettings) return;
+	//if (!bSettings) return;
 
-	ImGui::Begin("Aimbot Settings", &bSettings);
+	//ImGui::Begin("Aimbot Settings", &bSettings);
 
 	if (m_Device.isConnected() == false)
 	{
 		if (ImGui::Button("Connect Makcu Device")) m_Device.connect();
 	}
 	else
+	{
 		ImGui::Text("Makcu Device Connected: %s", m_Device.getDeviceInfo().port.c_str());
+		if (ImGui::Button("Disconnect Makcu Device")) m_Device.disconnect();
+		if (ImGui::Button("Test Mouse Move")) m_Device.mouseMove(100, 100);
+	}
 
 	ImGui::Checkbox("Master Toggle", &bMasterToggle);
 	ImGui::Checkbox("Draw FOV Circle", &bDrawFOV);
@@ -25,7 +29,7 @@ void Aimbot::RenderSettings()
 	ImGui::SliderFloat("Deadzone FOV", &fDeadzoneFov, 1.0f, 10.0f);
 	ImGui::InputScalar("Keybind", ImGuiDataType_U32, &m_Keybind);
 
-	ImGui::End();
+	//ImGui::End();
 }
 
 void Aimbot::RenderFOVCircle(const ImVec2& WindowPos, ImDrawList* DrawList)

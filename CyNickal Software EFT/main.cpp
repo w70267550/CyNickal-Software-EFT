@@ -3,10 +3,14 @@
 #include "GUI/Main Window/Main Window.h"
 #include "DMA/DMA Thread.h"
 
+#include "GUI/Config/Config.h"
+
 std::atomic<bool> bRunning{ true };
 int main()
 {
 	std::println("Hello, EFT_DMA!");
+
+	Config::LoadConfig("default");
 
 	std::thread DMAThread(DMA_Thread_Main);
 

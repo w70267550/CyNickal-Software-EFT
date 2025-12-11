@@ -9,12 +9,11 @@ private:
 	static void MyColorPicker(const char* label, ImColor& color);
 
 public:
-	static inline bool bMasterToggle{ true };
 	static inline ImColor m_PMCColor{ ImColor(200,0,0) };
 	static inline ImColor m_ScavColor{ ImColor(200,200,0) };
 	static inline ImColor m_PlayerScavColor{ ImColor(220,170,0) };
 	static inline ImColor m_LocalPlayerColor{ ImColor(0,200,0) };
 	static inline ImColor m_BossColor{ ImColor(225,0,225) };
 	static inline ImColor m_LootColor{ ImColor(0,150,150) };
-	static inline ImColor m_ValuableLootColor{ ImColor(0,252,198) };
+	static inline ImColor m_ValuableLootColor{ ImColor(252,15,192) };
 };

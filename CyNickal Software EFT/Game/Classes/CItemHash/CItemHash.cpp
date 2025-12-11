@@ -68,7 +68,6 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x9A6EDF14, "PPSh-41"},
 	{0xFB2CD802, "M4A1"},
 	{0x71A0A377, "M16A1"},
-	{0x529E1F4F, "VOG"},
 
 	/* Other items */
 	{0x7107CDBF, "Power Cord"},
@@ -85,7 +84,6 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x4F7BA371, "Drill"},
 	{0x772D13F3, "Toothpaste"},
 	{0x70469D50, "Chlorine"},
-	{0x3B7D8313, "Hemostatic"},
 
 	/* Containers */
 	{0x1D2E27D9, "PC Block"},

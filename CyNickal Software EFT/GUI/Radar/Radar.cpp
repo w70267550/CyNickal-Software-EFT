@@ -7,6 +7,9 @@ void Radar::Render()
 {
 	if (!bMasterToggle) return;
 
+	ImGui::SetNextWindowPos(ImVec2(5, 5), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(350, 350), ImGuiCond_Once);
+
 	ImGui::Begin("Radar", &bMasterToggle);
 
 	auto WindowPos = ImGui::GetWindowPos();
@@ -26,10 +29,6 @@ void Radar::Render()
 
 void Radar::RenderSettings()
 {
-	if (!bSettings) return;
-
-	ImGui::Begin("Radar Settings", &bSettings);
-
 	ImGui::Checkbox("Master Toggle", &bMasterToggle);
 	ImGui::SliderFloat("Scale", &Radar::fScale, 0.1f, 5.0f, "%.1f");
 	ImGui::SliderFloat("Local View Ray Length", &Radar::fLocalViewRayLength, 10.0f, 500.0f, "%.1f");
@@ -37,6 +36,4 @@ void Radar::RenderSettings()
 	ImGui::Checkbox("Local Player View Ray", &Radar::bLocalViewRay);
 	ImGui::Checkbox("Players View Rays", &Radar::bOtherPlayerViewRays);
 	ImGui::Checkbox("Loot", &DrawRadarLoot::bMasterToggle);
-
-	ImGui::End();
 }

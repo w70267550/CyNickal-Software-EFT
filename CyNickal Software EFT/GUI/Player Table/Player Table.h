@@ -8,7 +8,6 @@ public:
 	static void Render();
 
 public:
-	static inline bool bMasterToggle{ true };
 
 private:
 	static void AddRow(const CClientPlayer& Player);

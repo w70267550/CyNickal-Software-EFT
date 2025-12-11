@@ -166,7 +166,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Dependencies\MemProcFS;$(SolutionDir)Dependencies\ImGui;$(SolutionDir)Dependencies\Makcu\include;$(SolutionDir)Dependencies\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Dependencies\nlohmann;$(SolutionDir)Dependencies\MemProcFS;$(SolutionDir)Dependencies\ImGui;$(SolutionDir)Dependencies\Makcu\include;$(SolutionDir)Dependencies\sqlite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
     </ClCompile>
     <Link>
@@ -257,6 +257,7 @@
     <ClCompile Include="Game\Player List\Player List.cpp" />
     <ClCompile Include="GUI\Aimbot\Aimbot.cpp" />
     <ClCompile Include="GUI\Color Picker\Color Picker.cpp" />
+    <ClCompile Include="GUI\Config\Config.cpp" />
     <ClCompile Include="GUI\Main Menu\Main Menu.cpp" />
     <ClCompile Include="GUI\Fonts\Fonts.cpp" />
     <ClCompile Include="GUI\Fuser\Draw\Loot.cpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="Game\Player List\Player List.h" />
     <ClInclude Include="GUI\Aimbot\Aimbot.h" />
     <ClInclude Include="GUI\Color Picker\Color Picker.h" />
+    <ClInclude Include="GUI\Config\Config.h" />
     <ClInclude Include="GUI\Fonts\Data\IBMPlexMono.h" />
     <ClInclude Include="GUI\Fonts\Fonts.h" />
     <ClInclude Include="GUI\Fuser\Draw\Loot.h" />

@@ -6,10 +6,6 @@
 #include "GUI/Main Menu/Main Menu.h"
 #include "GUI/Radar/Radar.h"
 #include "GUI/Fuser/Fuser.h"
-#include "GUI/Aimbot/Aimbot.h"
-#include "GUI/Player Table/Player Table.h"
-#include "GUI/Loot Table/Loot Table.h"
-#include "GUI/Color Picker/Color Picker.h"
 
 void Render(ImGuiContext* ctx)
 {
@@ -22,15 +18,10 @@ void Render(ImGuiContext* ctx)
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport()->ID, nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
 
-	Radar::Render();
-	Radar::RenderSettings();
-	Fuser::Render();
-	Fuser::RenderSettings();
-	Aimbot::RenderSettings();
-	PlayerTable::Render();
-	LootTable::Render();
-	ColorPicker::Render();
 	MainMenu::Render();
+
+	Fuser::Render();
+	Radar::Render();
 
 	ImGui::PopFont();
 }
@@ -141,7 +132,7 @@ bool MainWindow::Initialize()
 
 	wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"MainWindow", nullptr };
 	::RegisterClassExW(&wc);
-	g_hWnd = ::CreateWindowEx(NULL, wc.lpszClassName, L"EFT DMA", WS_OVERLAPPEDWINDOW, 100, 100, 800, 800, nullptr, nullptr, wc.hInstance, nullptr);
+	g_hWnd = ::CreateWindowEx(NULL, wc.lpszClassName, L"EFT DMA", WS_OVERLAPPEDWINDOW, 0, 0, 1280, 720, nullptr, nullptr, wc.hInstance, nullptr);
 	// Initialize Direct3D
 	if (!CreateDeviceD3D(g_hWnd))
 	{
@@ -161,7 +152,7 @@ bool MainWindow::Initialize()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+	//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
 	ImGui::StyleColorsDark();

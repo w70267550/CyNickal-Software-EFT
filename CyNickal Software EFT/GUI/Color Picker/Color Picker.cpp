@@ -4,10 +4,6 @@
 
 void ColorPicker::Render()
 {
-	if (!bMasterToggle)	return;
-
-	ImGui::Begin("Color Picker", &bMasterToggle);
-
 	MyColorPicker("PMC Color", m_PMCColor);
 	MyColorPicker("Scav Color", m_ScavColor);
 	MyColorPicker("Boss Color", m_BossColor);
@@ -15,8 +11,6 @@ void ColorPicker::Render()
 	MyColorPicker("Local Player Color", m_LocalPlayerColor);
 	MyColorPicker("Loot Color", m_LootColor);
 	MyColorPicker("Valuable Loot Color", m_ValuableLootColor);
-
-	ImGui::End();
 }
 
 void ColorPicker::MyColorPicker(const char* label, ImColor& color)

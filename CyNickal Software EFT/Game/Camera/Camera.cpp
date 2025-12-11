@@ -124,12 +124,18 @@ bool Camera::InitializeCameraCache(DMA_Connection* Conn)
 
 uintptr_t Camera::SearchCameraCacheByName(const std::string& Name)
 {
-	for (auto& Entry : m_CameraCache)
+	bool found = false;
+	while (!found)
 	{
-		if (Entry.Name == Name)
-			return Entry.Address;
+		for (auto& Entry : m_CameraCache)
+		{
+			if (Entry.Name == Name)
+			{
+				found = true;
+				return Entry.Address;
+			}
+		}
 	}
-
 	throw std::runtime_error("Camera not found in cache: " + Name);
 }
 

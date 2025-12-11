@@ -147,6 +147,9 @@
     <ClCompile Include="Game\Classes\CItemHash\CItemHash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Config\Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -313,6 +316,9 @@
     </ClInclude>
     <ClInclude Include="Game\Classes\CItemHash\CItemHash.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Config\Config.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

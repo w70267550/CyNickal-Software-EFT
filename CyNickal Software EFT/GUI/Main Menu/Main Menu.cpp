@@ -7,17 +7,57 @@
 #include "GUI/Fuser/Fuser.h"
 #include "GUI/Radar/Radar.h"
 #include "GUI/Aimbot/Aimbot.h"
+#include "GUI/Config/Config.h"
 
 void MainMenu::Render()
 {
-	ImGui::Begin("Main Menu");
 
-	ImGui::Checkbox("Fuser Settings", &Fuser::bSettings);
-	ImGui::Checkbox("Radar Setting", &Radar::bSettings);
-	ImGui::Checkbox("Aimbot Settings", &Aimbot::bSettings);
-	ImGui::Checkbox("Color Picker", &ColorPicker::bMasterToggle);
-	ImGui::Checkbox("Player Table", &PlayerTable::bMasterToggle);
-	ImGui::Checkbox("Loot Table", &LootTable::bMasterToggle);
+	ImGui::SetNextWindowSize(ImVec2(700, 550), ImGuiCond_Once);
+
+	// Prevent Moving out of window
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking;
+
+	ImGui::Begin("EFT DMA - CyNickal", nullptr, window_flags);
+
+	if (ImGui::BeginTabBar("MenuTabs"))
+	{
+		if (ImGui::BeginTabItem("Fuser"))
+		{
+			Fuser::RenderSettings();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Radar"))
+		{
+			Radar::RenderSettings();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Aimbot"))
+		{
+			Aimbot::RenderSettings();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Color Picker"))
+		{
+			ColorPicker::Render();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Configs"))
+		{
+			Config::Render();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Players Table"))
+		{
+			PlayerTable::Render();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Loot Table"))
+		{
+			LootTable::Render();
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
 
 	ImGui::End();
 }

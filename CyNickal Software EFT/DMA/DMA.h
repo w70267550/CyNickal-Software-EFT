@@ -9,7 +9,6 @@ private:
 	static inline DMA_Connection* m_Instance = nullptr;
 
 public:
-	static void LightRefreshWrapper();
 	VMM_HANDLE GetHandle();
 	bool EndConnection();
 
@@ -19,4 +18,6 @@ private:
 private:
 	DMA_Connection();
 	~DMA_Connection();
+	bool GetFPGAInfo();
+	bool DumpMemoryMap(bool debug);
 };

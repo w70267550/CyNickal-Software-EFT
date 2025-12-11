@@ -5,10 +5,6 @@
 
 void LootTable::Render()
 {
-	if (!bMasterToggle)	return;
-
-	ImGui::Begin("Loot Table", &bMasterToggle);
-
 	m_LootFilter.Draw("##LootTableFilter", -FLT_MIN);
 	ImGui::Checkbox("Valuable Items Only", &bValuableOnly);
 
@@ -55,6 +51,4 @@ void LootTable::Render()
 
 		ImGui::EndTable();
 	}
-
-	ImGui::End();
 }
