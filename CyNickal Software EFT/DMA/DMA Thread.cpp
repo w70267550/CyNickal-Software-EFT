@@ -29,6 +29,8 @@ void DMA_Thread_Main()
 	CTimer Camera_UpdateViewMatrix(std::chrono::milliseconds(2), [&Conn]() { Camera::QuickUpdateViewMatrix(Conn); });
 	CTimer AimbotLoop(std::chrono::milliseconds(50), [&Conn]() { Aimbot::OnDMAFrame(Conn); });
 
+	CTimer LightRefresh(std::chrono::seconds(60), [&Conn]() { DMA_Connection::LightRefreshWrapper(Conn); });
+
 	while (bRunning)
 	{
 		auto TimeNow = std::chrono::high_resolution_clock::now();
@@ -36,6 +38,7 @@ void DMA_Thread_Main()
 		Player_Allocations.Tick(TimeNow);
 		Camera_UpdateViewMatrix.Tick(TimeNow);
 		AimbotLoop.Tick(TimeNow);
+		LightRefresh.Tick(TimeNow);
 		if (GetAsyncKeyState(VK_INSERT) & 0x1) PlayerList::FullUpdate(Conn, LocalGameWorldAddr);
 	}
 

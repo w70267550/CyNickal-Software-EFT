@@ -114,6 +114,8 @@ void PlayerList::QuickUpdate(DMA_Connection* Conn)
 {
 	std::scoped_lock Lock(m_PlayerMutex);
 
+	VMMDLL_ConfigSet(Conn->GetHandle(), VMMDLL_OPT_REFRESH_FREQ_TLB, 1);
+
 	auto vmsh = VMMDLL_Scatter_Initialize(Conn->GetHandle(), EFT::GetProcess().GetPID(), VMMDLL_FLAG_NOCACHE);
 
 	for (auto& Player : m_Players)

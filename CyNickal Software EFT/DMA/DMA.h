@@ -11,6 +11,7 @@ private:
 public:
 	VMM_HANDLE GetHandle();
 	bool EndConnection();
+	static void LightRefreshWrapper(DMA_Connection* Conn);
 
 private:
 	VMM_HANDLE m_VMMHandle = nullptr;
