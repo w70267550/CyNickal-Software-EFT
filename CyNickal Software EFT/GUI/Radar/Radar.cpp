@@ -3,6 +3,7 @@
 #include "GUI/Radar/Draw/Radar Players.h"
 #include "GUI/Radar/Draw/Radar Loot.h"
 #include "GUI/Color Picker/Color Picker.h"
+#include <algorithm>
 
 void Radar::Render()
 {
@@ -12,6 +13,14 @@ void Radar::Render()
 	ImGui::SetNextWindowSize(ImVec2(350, 350), ImGuiCond_FirstUseEver);
 
 	ImGui::Begin("Radar", &bMasterToggle);
+
+	auto& io = ImGui::GetIO();
+	if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && io.MouseWheel != 0.0f)
+	{
+		const float sensitivity = 0.1f;
+		fScale += io.MouseWheel * sensitivity;
+		fScale = std::clamp(fScale, 0.1f, 5.0f);
+	}
 
 	auto WindowPos = ImGui::GetWindowPos();
 	auto WindowSize = ImGui::GetWindowSize();
