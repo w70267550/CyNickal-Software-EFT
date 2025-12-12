@@ -204,6 +204,7 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 		}
 		if (gafAsyncKeyStateExport > 0x7FFFFFFFFFFF)
 		{
+			std::println("Found Keyboard at: 0x%p\n", gafAsyncKeyStateExport);
 			m_bInitialized = true;
 			return true;
 		}
@@ -264,10 +265,10 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 				std::println("failed to find gafAsyncKeyState");
 				return false;
 			}
-			std::println("found gafAsyncKeyState at: 0x%p\n", gafAsyncKeyState);
 		}
 		if (gafAsyncKeyStateExport > 0x7FFFFFFFFFFF)
 		{
+			std::println("Found Keyboard at: 0x%p", gafAsyncKeyStateExport);
 			m_bInitialized = true;
 			return true;
 		}
@@ -328,3 +329,5 @@ std::string c_registry::QueryValue(DMA_Connection* Conn, const char* path, e_reg
 	std::wstring wstr = std::wstring(reinterpret_cast<wchar_t*>(buffer));
 	return std::string(wstr.begin(), wstr.end());
 }
+
+

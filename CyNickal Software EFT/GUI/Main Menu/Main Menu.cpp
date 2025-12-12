@@ -8,6 +8,7 @@
 #include "GUI/Radar/Radar.h"
 #include "GUI/Aimbot/Aimbot.h"
 #include "GUI/Config/Config.h"
+#include "GUI/Keybinds/Keybinds.h"
 
 void MainMenu::Render()
 {
@@ -54,6 +55,11 @@ void MainMenu::Render()
 		if (ImGui::BeginTabItem("Loot Table"))
 		{
 			LootTable::Render();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Keybinds"))
+		{
+			Keybinds::Render();
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();

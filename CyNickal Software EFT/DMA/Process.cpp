@@ -22,6 +22,7 @@ bool Process::GetProcessInfo(DMA_Connection* Conn)
 		}
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
+		VMMDLL_ConfigSet(Conn->GetHandle(), VMMDLL_OPT_REFRESH_ALL, 1); // Refresh Cache Processes if not Found
 	}
 
 	return true;

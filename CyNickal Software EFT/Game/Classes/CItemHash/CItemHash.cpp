@@ -4,6 +4,7 @@
 
 const std::unordered_map<uint32_t, std::string> gItemNames
 {
+	// Guns
 	{0xBFA7DBD, "Saiga-12k"},
 	{0x32142AA, "TOZ KS-23M"},
 	{0xAE4D2212, "TOZ-106"},
@@ -69,6 +70,18 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0xFB2CD802, "M4A1"},
 	{0x71A0A377, "M16A1"},
 	{0x529E1F4F, "VOG"},
+	{0xA8167B1, "MP-43"},
+	{0x54A6C93A, "Bayonet"},
+	{0x5C4B74AB, "AK74"},
+	{0x54A6C93A, "Bayonet"},
+	{0xA8167B1, "MP-43"},
+	{0xD47E15FC, "MTs-255"},
+	{0xDDAE3F70, "MP-18"},
+	{0xDD037A23, "VPO-215"},
+	{0x6DF88E81, "PM-T"},
+	{0xC049E7C8, "PP-91-01"},
+	{0xFC820774, "MPX"},
+	{0x90AE7785, "AK-101"},
 
 	/* Other items */
 	{0x7107CDBF, "Power Cord"},
@@ -86,6 +99,30 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x772D13F3, "Toothpaste"},
 	{0x70469D50, "Chlorine"},
 	{0x3B7D8313, "Hemostatic"},
+	{0xB8F989D8, "Strike"},
+	{0xE0B96862, "PAID AntiRoach Spray"},
+	{0x43E49590, "Paracord"},
+	{0xB9AB1BBF, "Crickent"},
+	{0x3BBB488F, "Rye Croutons"},
+	{0xC9C9F960, "Oatflakes"},
+	{0x97C9A547, "Bleach"},
+	{0xFDA126AD, "D Size Battery"},
+	{0x193DC243, "Peas"},
+	{0xF0F67009, "TarCola"},
+	{0x257DA56D, "Herring"},
+	{0x35857077, "Malboro"},
+	{0x1CE3C67A, "Roubles"},
+	{0x3CF5578F, "Vodka"},
+	{0x7231B1A4, "Water"},
+	{0xB132F9A5, "Wilston"},
+	{0xC91A80A5, "Clin Window Cleaner"},
+	{0xC94CCBFE, "Hotrod"},
+	{0x561434B, "Hunter Matches"},
+	{0x51D7E7F1, "Apollo"},
+	{0x1BD91856, "IceGreen"},
+	
+	{0xA923BB33, "Medkit" },
+	{0x900797A2, "Analgin Painkillers"},
 
 	/* Containers */
 	{0x1D2E27D9, "PC Block"},

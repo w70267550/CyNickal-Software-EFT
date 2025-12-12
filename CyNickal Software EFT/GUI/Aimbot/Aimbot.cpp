@@ -60,32 +60,29 @@ float Distance(ImVec2 a, ImVec2 b)
 }
 void Aimbot::OnDMAFrame(DMA_Connection* Conn)
 {
-	if (bMasterToggle) return;
+	if (!bMasterToggle) return;
 
 	if (c_keys::IsInitialized() == false || m_Device.isConnected() == false) return;
 
-	if (c_keys::IsKeyDown(Conn, m_Keybind) == false) return;
+	//if (!c_keys::IsKeyDown(Conn, m_Keybind)) return;
 
 	auto BestTarget = Aimbot::FindBestTarget();
 
-	do
-	{
-		PlayerList::QuickUpdate(Conn);
-		Camera::QuickUpdateViewMatrix(Conn);
 
-		auto Delta = GetAimDeltaToTarget(BestTarget);
-		static ImVec2 PreviousDelta{};
+	PlayerList::QuickUpdate(Conn);
+	Camera::QuickUpdateViewMatrix(Conn);
 
-		if (Distance(Delta, PreviousDelta) < 0.5f)
-			continue;
+	auto Delta = GetAimDeltaToTarget(BestTarget);
+	static ImVec2 PreviousDelta{};
 
-		PreviousDelta = Delta;
-		Delta.x *= fDampen;
-		Delta.y *= fDampen;
+	if (Distance(Delta, PreviousDelta) < 0.5f)
+		return;
 
-		m_Device.mouseMove(Delta.x, Delta.y);
+	PreviousDelta = Delta;
+	Delta.x *= fDampen;
+	Delta.y *= fDampen;
 
-	} while (c_keys::IsKeyDown(Conn, m_Keybind));
+	m_Device.mouseMove(Delta.x, Delta.y);
 
 }
 

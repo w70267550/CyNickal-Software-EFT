@@ -150,6 +150,9 @@
     <ClCompile Include="GUI\Config\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Keybinds\Keybinds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -318,6 +321,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Config\Config.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Keybinds\Keybinds.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -94,5 +94,6 @@ void DrawRadarPlayers::DrawLocalPlayer(const CClientPlayer& Player, const ImVec2
 {
 	DrawList->AddCircleFilled(CenterScreen, 5, ColorPicker::m_LocalPlayerColor);
 
-	DrawCharacterViewRay(Player, CenterScreen, DrawList, ColorPicker::m_LocalPlayerColor, true);
+	if (Radar::bLocalViewRay)
+		DrawCharacterViewRay(Player, CenterScreen, DrawList, ColorPicker::m_LocalPlayerColor, true);
 }

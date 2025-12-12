@@ -7,7 +7,7 @@ void Radar::Render()
 {
 	if (!bMasterToggle) return;
 
-	ImGui::SetNextWindowPos(ImVec2(5, 5), ImGuiCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(10, 45), ImGuiCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(350, 350), ImGuiCond_Once);
 
 	ImGui::Begin("Radar", &bMasterToggle);

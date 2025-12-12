@@ -8,6 +8,8 @@
 #include "GUI/Fuser/Fuser.h"
 #include "GUI/Color Picker/Color Picker.h"
 #include "GUI/Radar/Radar.h"
+#include "GUI/Fuser/Draw/Loot.h"
+#include "GUI/Fuser/Draw/Players.h"
 
 std::string Config::getConfigDir() {
 	char path[MAX_PATH];
@@ -38,12 +40,18 @@ void Config::Render()
 {
 	static char configNameBuf[128] = "default";
 	static int selectedConfig = -1;
-	std::string configDir = getConfigDir();
+	std::string configDir;
 	std::vector<std::string> configFiles;
-	for (const auto& entry : std::filesystem::directory_iterator(configDir)) {
-		if (entry.is_regular_file() && entry.path().extension() == ".json") {
-			configFiles.push_back(entry.path().stem().string());
+
+	bool firstrun = false;
+	if (!firstrun) {
+		configDir = getConfigDir();
+		for (const auto& entry : std::filesystem::directory_iterator(configDir)) {
+			if (entry.is_regular_file() && entry.path().extension() == ".json") {
+				configFiles.push_back(entry.path().stem().string());
+			}
 		}
+		firstrun = true;
 	}
 
 	ImGui::BeginChild("##ConfigsSettings", ImVec2(ImGui::GetContentRegionAvail().x / 2, ImGui::GetContentRegionAvail().y), true);
@@ -88,6 +96,15 @@ void Config::Render()
 	ImGui::BeginChild("##ConfigsSettings2", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true);
 
 	ImGui::Text("Config List");
+	ImGui::SameLine();
+	if (ImGui::Button("Refresh")) {
+		configFiles.clear();
+		for (const auto& entry : std::filesystem::directory_iterator(configDir)) {
+			if (entry.is_regular_file() && entry.path().extension() == ".json") {
+				configFiles.push_back(entry.path().stem().string());
+			}
+		}
+	}
 	ImGui::Separator();
 
 	for (size_t i = 0; i < configFiles.size(); ++i) {
@@ -115,7 +132,22 @@ json Config::SerializeCheatConfig() {
 
 	j["Fuser"] = {
 		{"bMasterToggle", Fuser::bMasterToggle},
-		{"ScreenSize", {Fuser::m_ScreenSize.x, Fuser::m_ScreenSize.y}}
+		{"bRenderWatermark", Fuser::bRenderWatermark},
+		{"ScreenSize", {Fuser::m_ScreenSize.x, Fuser::m_ScreenSize.y}},
+
+		{"Player", {
+			{"bNameText", DrawESPPlayers::bNameText},
+			{"bSkeleton", DrawESPPlayers::bSkeleton},
+			{"bHeadDot", DrawESPPlayers::bHeadDot},
+			{"bBox", DrawESPPlayers::bBox},
+		}},
+
+		{"Loot", {
+			{"bMasterToggle", DrawESPLoot::bMasterToggle},
+			{"fMaxDistance", DrawESPLoot::fMaxDistance},
+			{"m_ToggleLootESP", DrawESPLoot::m_ToggleLootESP}
+		}},
+
 	};
 
 	j["Radar"] = {
@@ -171,10 +203,44 @@ void Config::DeserializeCheatConfig(const json& j) {
 		if (fuserTable.contains("bMasterToggle")) {
 			Fuser::bMasterToggle = fuserTable["bMasterToggle"].get<bool>();
 		}
+		if (fuserTable.contains("bRenderWatermark")) {
+			Fuser::bRenderWatermark = fuserTable["bRenderWatermark"].get<bool>();
+		}
 		if (fuserTable.contains("ScreenSize")) {
 			const auto& screenSizeJson = fuserTable["ScreenSize"];
 			if (screenSizeJson.is_array() && screenSizeJson.size() == 2) {
 				Fuser::m_ScreenSize = ImVec2(screenSizeJson[0].get<float>(), screenSizeJson[1].get<float>());
+			}
+		}
+
+		if (fuserTable.contains("Player")) {
+			const auto& PlayerTable = fuserTable["Player"];
+
+			if (PlayerTable.contains("bNameText")) {
+				DrawESPPlayers::bNameText = PlayerTable["bNameText"].get<bool>();
+			}
+			if (PlayerTable.contains("bSkeleton")) {
+				DrawESPPlayers::bSkeleton = PlayerTable["bSkeleton"].get<bool>();
+			}
+			if (PlayerTable.contains("bHeadDot")) {
+				DrawESPPlayers::bHeadDot = PlayerTable["bHeadDot"].get<bool>();
+			}
+			if (PlayerTable.contains("bBox")) {
+				DrawESPPlayers::bBox = PlayerTable["bBox"].get<bool>();
+			}
+		}
+
+		if (fuserTable.contains("Loot")) {
+			const auto& LootTable = fuserTable["Loot"];
+
+			if (LootTable.contains("bMasterToggle")) {
+				DrawESPLoot::bMasterToggle = LootTable["bMasterToggle"].get<bool>();
+			}
+			if (LootTable.contains("fMaxDistance")) {
+				DrawESPLoot::fMaxDistance = LootTable["fMaxDistance"].get<float>();
+			}
+			if (LootTable.contains("m_ToggleLootESP")) {
+				DrawESPLoot::m_ToggleLootESP = LootTable["m_ToggleLootESP"].get<uint32_t>();
 			}
 		}
 	}
@@ -227,6 +293,7 @@ void Config::DeserializeCheatConfig(const json& j) {
 			ColorPicker::m_ValuableLootColor = colorsTable["m_ValuableLootColor"].get<ImU32>();
 		}
 	}
+
 }
 
 void Config::SaveConfig(const std::string& configName) {

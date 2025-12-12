@@ -83,7 +83,7 @@ void DrawESPPlayers::Draw(const CObservedPlayer& Player, const ImVec2& WindowPos
 	m_ProjectedBoneCache.fill({});
 
 	for (int i = 0; i < SKELETON_NUMBONES; i++)
-		Camera::WorldToScreen(Player.m_pSkeleton->m_BonePositions[i], m_ProjectedBoneCache[i]);
+		if (!Camera::WorldToScreen(Player.m_pSkeleton->m_BonePositions[i], m_ProjectedBoneCache[i])) return;
 
 	uint8_t LineNumber = 0;
 
@@ -95,11 +95,18 @@ void DrawESPPlayers::Draw(const CObservedPlayer& Player, const ImVec2& WindowPos
 
 	if (bHeadDot) {
 		auto& ProjectedHeadPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Head]];
-		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), 4.0f, Player.GetSideColor(), 12, 1.0f);
+		auto& ProjectedRootPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
+		float dx = ProjectedHeadPos.x - ProjectedRootPos.x;
+		float dy = ProjectedHeadPos.y - ProjectedRootPos.y;
+		float radius = fmaxf(1.0f, sqrtf(dx * dx + dy * dy) / 8.5f);
+		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), radius, Player.GetSideColor(), 12, 1.0f);
 	}
 
 	if (bSkeleton)
 		DrawSkeleton(*Player.m_pSkeleton, WindowPos, DrawList);
+
+	if (bBox)
+		DrawBox(WindowPos, DrawList, ImColor(255,255,255,255));
 }
 
 void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, ImDrawList* DrawList)
@@ -113,7 +120,7 @@ void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, 
 	m_ProjectedBoneCache.fill({});
 
 	for (int i = 0; i < SKELETON_NUMBONES; i++)
-		Camera::WorldToScreen(Player.m_pSkeleton->m_BonePositions[i], m_ProjectedBoneCache[i]);
+		if (!Camera::WorldToScreen(Player.m_pSkeleton->m_BonePositions[i], m_ProjectedBoneCache[i])) return;
 
 	uint8_t LineNumber = 0;
 
@@ -124,11 +131,18 @@ void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, 
 
 	if (bHeadDot) {
 		auto& ProjectedHeadPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Head]];
-		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), 4.0f, Player.GetSideColor(), 12, 1.0f);
+		auto& ProjectedRootPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
+		float dx = ProjectedHeadPos.x - ProjectedRootPos.x;
+		float dy = ProjectedHeadPos.y - ProjectedRootPos.y;
+		float radius = fmaxf(1.0f, sqrtf(dx * dx + dy * dy) / 8.5f);
+		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), radius, Player.GetSideColor(), 12, 1.0f);
 	}
 
 	if (bSkeleton)
 		DrawSkeleton(*Player.m_pSkeleton, WindowPos, DrawList);
+
+	if (bBox)
+		DrawBox(WindowPos, DrawList, ImColor(255, 255, 255, 255));
 }
 
 void ConnectBones(const Vector2& BoneA, const Vector2& BoneB, const ImVec2& WindowPos, ImDrawList* DrawList, const ImColor& Color, float Thickness)
@@ -185,4 +199,27 @@ void DrawESPPlayers::DrawSkeleton(const CPlayerSkeleton& Skeleton, const ImVec2&
 	ConnectBones(ProjectedLUpperArm, ProjectedLForeArm1, WindowPos, DrawList, ImColor(255, 0, 0), Width);
 	ConnectBones(ProjectedLForeArm1, ProjectedLForeArm2, WindowPos, DrawList, ImColor(255, 0, 0), Width);
 	ConnectBones(ProjectedLForeArm2, ProjectedLPalm, WindowPos, DrawList, ImColor(255, 0, 0), Width);
+}
+
+void DrawESPPlayers::DrawBox(const ImVec2& WindowPos, ImDrawList* DrawList, const ImColor& Color)
+{
+	auto& projHead = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Head]];
+	auto& projRoot = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
+
+	float centerX = projRoot.x;
+	float topY = projHead.y;
+	float bottomY = projRoot.y;
+	float height = fabsf(bottomY - topY);
+
+	if (height < 1.0f) return; // too small to draw
+
+	float width = fmaxf(5.0f, height / 2.0f);
+
+	float leftX = centerX - (width / 2.0f);
+	float rightX = centerX + (width / 2.0f);
+
+	ImVec2 topLeft(WindowPos.x + leftX, WindowPos.y + topY);
+	ImVec2 bottomRight(WindowPos.x + rightX, WindowPos.y + bottomY);
+
+	DrawList->AddRect(topLeft, bottomRight, Color, 0.0f, 0, 1.5f);
 }

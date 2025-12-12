@@ -23,6 +23,8 @@ void Render(ImGuiContext* ctx)
 	Fuser::Render();
 	Radar::Render();
 
+
+
 	ImGui::PopFont();
 }
 
@@ -132,7 +134,7 @@ bool MainWindow::Initialize()
 
 	wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"MainWindow", nullptr };
 	::RegisterClassExW(&wc);
-	g_hWnd = ::CreateWindowEx(NULL, wc.lpszClassName, L"EFT DMA", WS_OVERLAPPEDWINDOW, 0, 0, 1280, 720, nullptr, nullptr, wc.hInstance, nullptr);
+	g_hWnd = ::CreateWindowEx(NULL, wc.lpszClassName, L"EFT DMA", WS_OVERLAPPEDWINDOW, 200, 200, 1280, 720, nullptr, nullptr, wc.hInstance, nullptr);
 	// Initialize Direct3D
 	if (!CreateDeviceD3D(g_hWnd))
 	{
@@ -162,6 +164,7 @@ bool MainWindow::Initialize()
 	style.FontScaleDpi = main_scale;        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
 	io.ConfigDpiScaleFonts = true;          // [Experimental] Automatically overwrite style.FontScaleDpi in Begin() when Monitor DPI changes. This will scale fonts but _NOT_ scale sizes/padding for now.
 	io.ConfigDpiScaleViewports = true;      // [Experimental] Scale Dear ImGui and Platform Windows when Monitor DPI changes.
+	io.IniFilename = nullptr;               // Disable .ini saving/loading
 
 	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

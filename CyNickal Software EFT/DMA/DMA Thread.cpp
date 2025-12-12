@@ -6,6 +6,7 @@
 #include "Game/GOM/GOM.h"
 #include "Game/Camera/Camera.h"
 #include "GUI/Aimbot/Aimbot.h"
+#include "GUI/Keybinds/Keybinds.h"
 
 extern std::atomic<bool> bRunning;
 
@@ -27,9 +28,12 @@ void DMA_Thread_Main()
 		PlayerList::HandlePlayerAllocations(Conn);
 		});
 	CTimer Camera_UpdateViewMatrix(std::chrono::milliseconds(2), [&Conn]() { Camera::QuickUpdateViewMatrix(Conn); });
-	CTimer AimbotLoop(std::chrono::milliseconds(50), [&Conn]() { Aimbot::OnDMAFrame(Conn); });
 
-	CTimer LightRefresh(std::chrono::seconds(60), [&Conn]() { DMA_Connection::LightRefreshWrapper(Conn); });
+	//CTimer AimbotLoop(std::chrono::milliseconds(50), [&Conn]() { Aimbot::OnDMAFrame(Conn); });
+
+	CTimer LightRefresh(std::chrono::seconds(180), [&Conn]() { DMA_Connection::LightRefreshWrapper(Conn); });
+
+	CTimer Keybinds(std::chrono::milliseconds(10), [&Conn, &LocalGameWorldAddr]() { Keybinds::OnFrame(Conn, LocalGameWorldAddr); });
 
 	while (bRunning)
 	{
@@ -37,8 +41,11 @@ void DMA_Thread_Main()
 		Player_Quick.Tick(TimeNow);
 		Player_Allocations.Tick(TimeNow);
 		Camera_UpdateViewMatrix.Tick(TimeNow);
-		AimbotLoop.Tick(TimeNow);
+		//AimbotLoop.Tick(TimeNow);
 		LightRefresh.Tick(TimeNow);
+
+		Keybinds.Tick(TimeNow);
+
 		if (GetAsyncKeyState(VK_INSERT) & 0x1) PlayerList::FullUpdate(Conn, LocalGameWorldAddr);
 	}
 

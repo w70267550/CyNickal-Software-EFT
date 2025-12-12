@@ -20,7 +20,7 @@ int main()
 
 	while (bRunning)
 	{
-		if (GetAsyncKeyState(VK_END) & 1)	bRunning = false;
+		if (GetAsyncKeyState(VK_END) & 1) bRunning = false;
 
 #ifndef DLL_FORM
 		MainWindow::OnFrame();
