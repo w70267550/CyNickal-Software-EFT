@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/CyNickal Software EFT/mmap.txt
+/CyNickal Software EFT/imgui.ini
