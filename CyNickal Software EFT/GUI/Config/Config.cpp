@@ -132,7 +132,7 @@ json Config::SerializeCheatConfig() {
 
 	j["Fuser"] = {
 		{"bMasterToggle", Fuser::bMasterToggle},
-		{"bRenderWatermark", Fuser::bRenderWatermark},
+		{"bRenderFPS", Fuser::bRenderFPS},
 		{"ScreenSize", {Fuser::m_ScreenSize.x, Fuser::m_ScreenSize.y}},
 
 		{"Player", {
@@ -145,7 +145,7 @@ json Config::SerializeCheatConfig() {
 		{"Loot", {
 			{"bMasterToggle", DrawESPLoot::bMasterToggle},
 			{"fMaxDistance", DrawESPLoot::fMaxDistance},
-			{"m_ToggleLootESP", DrawESPLoot::m_ToggleLootESP}
+			{"m_ToggleLootESP", DrawESPLoot::m_ToggleLootESP},
 		}},
 
 	};
@@ -156,7 +156,8 @@ json Config::SerializeCheatConfig() {
 		{"bOtherPlayerViewRays", Radar::bOtherPlayerViewRays},
 		{"fScale", Radar::fScale},
 		{"fLocalViewRayLength", Radar::fLocalViewRayLength},
-		{"fOtherViewRayLength", Radar::fOtherViewRayLength}
+		{"fOtherViewRayLength", Radar::fOtherViewRayLength},
+		{"m_RadarBackgroundColor", static_cast<uint32_t>(Radar::m_RadarBackgroundColor)},
 	};
 
 	j["Colors"] = {
@@ -166,7 +167,8 @@ json Config::SerializeCheatConfig() {
 		{"m_LocalPlayerColor", static_cast<uint32_t>(ColorPicker::m_LocalPlayerColor)},
 		{"m_BossColor", static_cast<uint32_t>(ColorPicker::m_BossColor)},
 		{"m_LootColor", static_cast<uint32_t>(ColorPicker::m_LootColor)},
-		{"m_ValuableLootColor", static_cast<uint32_t>(ColorPicker::m_ValuableLootColor)}
+		{"m_ValuableLootColor", static_cast<uint32_t>(ColorPicker::m_ValuableLootColor)},
+
 	};
 
 	return j;
@@ -204,7 +206,7 @@ void Config::DeserializeCheatConfig(const json& j) {
 			Fuser::bMasterToggle = fuserTable["bMasterToggle"].get<bool>();
 		}
 		if (fuserTable.contains("bRenderWatermark")) {
-			Fuser::bRenderWatermark = fuserTable["bRenderWatermark"].get<bool>();
+			Fuser::bRenderFPS = fuserTable["bRenderFPS"].get<bool>();
 		}
 		if (fuserTable.contains("ScreenSize")) {
 			const auto& screenSizeJson = fuserTable["ScreenSize"];
@@ -265,6 +267,9 @@ void Config::DeserializeCheatConfig(const json& j) {
 		}
 		if (radarTable.contains("fOtherViewRayLength")) {
 			Radar::fOtherViewRayLength = radarTable["fOtherViewRayLength"].get<float>();
+		}
+		if (radarTable.contains("m_RadarBackgroundColor")) {
+			Radar::m_RadarBackgroundColor = radarTable["m_RadarBackgroundColor"].get<ImU32>();
 		}
 	}
 

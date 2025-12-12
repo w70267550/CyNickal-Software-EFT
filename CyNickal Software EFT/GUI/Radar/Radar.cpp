@@ -2,12 +2,13 @@
 #include "GUI/Radar/Radar.h"
 #include "GUI/Radar/Draw/Radar Players.h"
 #include "GUI/Radar/Draw/Radar Loot.h"
+#include "GUI/Color Picker/Color Picker.h"
 
 void Radar::Render()
 {
 	if (!bMasterToggle) return;
 
-	ImGui::SetNextWindowPos(ImVec2(10, 45), ImGuiCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(175, 10), ImGuiCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(350, 350), ImGuiCond_Once);
 
 	ImGui::Begin("Radar", &bMasterToggle);
@@ -19,7 +20,7 @@ void Radar::Render()
 	ImVec2 RectTopLeft = WindowPos;
 	ImVec2 RectBottomRight = ImVec2(WindowPos.x + WindowSize.x, WindowPos.y + WindowSize.y);
 
-	DrawList->AddRectFilled(RectTopLeft, RectBottomRight, IM_COL32(55, 55, 55, 255));
+	DrawList->AddRectFilled(RectTopLeft, RectBottomRight, m_RadarBackgroundColor);
 
 	DrawRadarLoot::DrawAll(WindowPos, WindowSize, DrawList);
 	DrawRadarPlayers::DrawAll(WindowPos, WindowSize, DrawList);
@@ -36,4 +37,7 @@ void Radar::RenderSettings()
 	ImGui::Checkbox("Local Player View Ray", &Radar::bLocalViewRay);
 	ImGui::Checkbox("Players View Rays", &Radar::bOtherPlayerViewRays);
 	ImGui::Checkbox("Loot", &DrawRadarLoot::bMasterToggle);
+
+	ImGui::SetNextItemWidth(150.0f);
+	ImGui::ColorEdit4("Radar Background Color", &m_RadarBackgroundColor.Value.x);
 }

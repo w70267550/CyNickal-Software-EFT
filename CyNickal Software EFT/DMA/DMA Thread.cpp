@@ -29,9 +29,7 @@ void DMA_Thread_Main()
 		});
 	CTimer Camera_UpdateViewMatrix(std::chrono::milliseconds(2), [&Conn]() { Camera::QuickUpdateViewMatrix(Conn); });
 
-	//CTimer AimbotLoop(std::chrono::milliseconds(50), [&Conn]() { Aimbot::OnDMAFrame(Conn); });
-
-	CTimer LightRefresh(std::chrono::seconds(180), [&Conn]() { DMA_Connection::LightRefreshWrapper(Conn); });
+	CTimer LightRefresh(std::chrono::seconds(30), [&Conn]() { DMA_Connection::LightRefreshWrapper(Conn); });
 
 	CTimer Keybinds(std::chrono::milliseconds(10), [&Conn, &LocalGameWorldAddr]() { Keybinds::OnFrame(Conn, LocalGameWorldAddr); });
 
@@ -41,11 +39,8 @@ void DMA_Thread_Main()
 		Player_Quick.Tick(TimeNow);
 		Player_Allocations.Tick(TimeNow);
 		Camera_UpdateViewMatrix.Tick(TimeNow);
-		//AimbotLoop.Tick(TimeNow);
 		LightRefresh.Tick(TimeNow);
-
 		Keybinds.Tick(TimeNow);
-
 		if (GetAsyncKeyState(VK_INSERT) & 0x1) PlayerList::FullUpdate(Conn, LocalGameWorldAddr);
 	}
 

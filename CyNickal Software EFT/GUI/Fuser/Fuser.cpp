@@ -15,7 +15,7 @@ void Fuser::Render()
 	auto WindowPos = ImGui::GetWindowPos();
 	auto DrawList = ImGui::GetWindowDrawList();
 
-	Fuser::RenderWatermark();
+	Fuser::RenderFPS();
 
 	DrawESPPlayers::DrawAll(WindowPos, DrawList);
 	DrawESPLoot::DrawAll(WindowPos, DrawList);
@@ -38,7 +38,7 @@ void Fuser::RenderSettings()
 	DrawESPLoot::m_LootFilter.Draw("Loot Filter");
 	ImGui::InputFloat("Screen Width", &Fuser::m_ScreenSize.x);
 	ImGui::InputFloat("Screen Height", &Fuser::m_ScreenSize.y);
-	ImGui::Checkbox("Render Watermark", &bRenderWatermark);
+	ImGui::Checkbox("Show FPS", &bRenderFPS);
 }
 
 ImVec2 Fuser::GetCenterScreen()
@@ -46,19 +46,13 @@ ImVec2 Fuser::GetCenterScreen()
 	return { m_ScreenSize.x * .5f, m_ScreenSize.y * .5f };
 }
 
-void Fuser::RenderWatermark()
+void Fuser::RenderFPS()
 {
-	if (!bRenderWatermark) return;
+	if (!bRenderFPS) return;
 
-	ImVec2 boxPos = ImVec2(10, 10);
-	ImVec2 boxSize = ImVec2(175, 34);
-	ImGui::SetCursorPos(boxPos);
+	ImVec2 TextPos = ImVec2(5, 5);
+	ImGui::SetCursorPos(TextPos);
 
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(30, 30, 30, 200));
-
-	ImGui::BeginChild("WatermarkBox", boxSize, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
-	ImGui::Text("EFT DMA |");
-	ImGui::SameLine();
 	// Limit FPS update rate to once per second for readability
 	static float lastFps = 0.0f;
 	static double lastUpdate = 0.0;
@@ -69,6 +63,4 @@ void Fuser::RenderWatermark()
 		lastUpdate = currentTime;
 	}
 	ImGui::Text("FPS: %.0f", lastFps);
-	ImGui::EndChild();
-	ImGui::PopStyleColor();
 }

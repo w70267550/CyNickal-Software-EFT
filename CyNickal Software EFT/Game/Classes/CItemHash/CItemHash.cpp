@@ -120,6 +120,14 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x561434B, "Hunter Matches"},
 	{0x51D7E7F1, "Apollo"},
 	{0x1BD91856, "IceGreen"},
+	{0x7104340F, "KEK"},
+	{0x3E82F634, "Sprats"},
+	{0x557EC52, "Noodles"},
+	{0xA693CCB6, "Alyonka" },
+	{ 0x557EC52, "Noodles" },
+	{ 0x557EC52, "Noodles" },
+	{ 0x557EC52, "Noodles" },
+	
 	
 	{0xA923BB33, "Medkit" },
 	{0x900797A2, "Analgin Painkillers"},
@@ -142,6 +150,9 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x3B201746, "Static Corpse"},
 	{0xA9904ABD, "Ammo Crate"},
 	{0x84CAE97A, "Weapon Box"},
+	{0x51C1387F, "Weapon Box" },
+	{0x64941E79, "Grenade Box" },
+	
 };
 
 const std::unordered_map<uint32_t, std::string> gValuables

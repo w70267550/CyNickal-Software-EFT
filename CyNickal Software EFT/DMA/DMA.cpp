@@ -169,6 +169,6 @@ bool DMA_Connection::DumpMemoryMap(bool debug)
 
 void DMA_Connection::LightRefreshWrapper(DMA_Connection* Conn)
 {
-	VMMDLL_ConfigSet(Conn->GetHandle(), VMMDLL_OPT_REFRESH_FREQ_FAST, 1);
-	std::println("[+] Performed fast cache refresh on DMA.");
+	VMMDLL_ConfigSet(Conn->GetHandle(), VMMDLL_OPT_REFRESH_FREQ_MEM_PARTIAL, 1);
+	std::println("[+] Performed partial cache refresh on DMA.");
 }
