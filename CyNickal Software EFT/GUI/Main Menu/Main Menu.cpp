@@ -12,12 +12,9 @@
 
 void MainMenu::Render()
 {
-	ImGui::SetNextWindowSize(ImVec2(900, 550), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(900, 550), ImGuiCond_FirstUseEver);
 
-	// Prevent Moving out of window
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize;
-
-	ImGui::Begin("EFT DMA - CyNickal", nullptr, window_flags);
+	ImGui::Begin("EFT DMA - CyNickal", nullptr);
 
 	if (ImGui::BeginTabBar("MenuTabs"))
 	{
