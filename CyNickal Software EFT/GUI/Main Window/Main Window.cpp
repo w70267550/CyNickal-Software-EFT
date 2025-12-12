@@ -119,8 +119,11 @@ LRESULT __stdcall MainWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 		if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
 			return 0;
 		break;
+	case WM_CLOSE:
+		// Prevent window from closing when "X" is pressed
+		return 0;
 	case WM_DESTROY:
-		::PostQuitMessage(0);
+		// Prevent window from destroy
 		return 0;
 	}
 	return ::DefWindowProcW(hWnd, msg, wParam, lParam);

@@ -44,23 +44,20 @@ void Config::Render()
 	std::string configDir;
 	std::vector<std::string> configFiles;
 
-	bool firstrun = false;
-	if (!firstrun) {
+	static bool bFirstRun{ false };
+	if (!bFirstRun) {
 		configDir = getConfigDir();
 		for (const auto& entry : std::filesystem::directory_iterator(configDir)) {
 			if (entry.is_regular_file() && entry.path().extension() == ".json") {
 				configFiles.push_back(entry.path().stem().string());
 			}
 		}
-		firstrun = true;
+		bFirstRun = true;
 	}
 
-	ImGui::BeginChild("##ConfigsSettings", ImVec2(ImGui::GetContentRegionAvail().x / 2, ImGui::GetContentRegionAvail().y), true);
+	ImGui::BeginChild("##ConfigsSettings", ImVec2(ImGui::GetContentRegionAvail().x / 2, ImGui::GetContentRegionAvail().y), false);
 
-	ImGui::Text("Config Settings");
-	ImGui::Separator();
-
-	ImGui::SetNextItemWidth(150.0f);
+	ImGui::SetNextItemWidth(180.0f);
 	ImGui::InputText("Config Name", configNameBuf, IM_ARRAYSIZE(configNameBuf));
 
 	if (ImGui::Button("Save Config"))
@@ -90,15 +87,8 @@ void Config::Render()
 	if (ImGui::Button("Open Config Folder")) {
 		ShellExecuteA(nullptr, "open", configDir.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 	}
-	ImGui::EndChild();
-
 	ImGui::SameLine();
-
-	ImGui::BeginChild("##ConfigsSettings2", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true);
-
-	ImGui::Text("Config List");
-	ImGui::SameLine();
-	if (ImGui::Button("Refresh")) {
+	if (ImGui::Button("Refresh List")) {
 		configFiles.clear();
 		for (const auto& entry : std::filesystem::directory_iterator(configDir)) {
 			if (entry.is_regular_file() && entry.path().extension() == ".json") {
@@ -106,6 +96,13 @@ void Config::Render()
 			}
 		}
 	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	ImGui::BeginChild("##ConfigsSettings2", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false);
+
+	ImGui::Text("Config Files");
 	ImGui::Separator();
 
 	for (size_t i = 0; i < configFiles.size(); ++i) {
@@ -119,7 +116,45 @@ void Config::Render()
 	ImGui::EndChild();
 }
 
-json Config::SerializeCheatConfig() {
+static void DeserializeKeybindObj(const json& Table, const std::string& Name, CKeybind& Out)
+{
+	if (!Table.contains(Name))
+		return;
+
+	const auto& k = Table[Name];
+	if (k.contains("m_Key")) Out.m_Key = k["m_Key"].get<uint32_t>();
+	if (k.contains("m_bTargetPC")) Out.m_bTargetPC = k["m_bTargetPC"].get<bool>();
+	if (k.contains("m_bRadarPC")) Out.m_bRadarPC = k["m_bRadarPC"].get<bool>();
+}
+
+void Config::DeserializeKeybind(const json& Table) {
+	DeserializeKeybindObj(Table, "DMARefresh", Keybinds::DMARefresh);
+	DeserializeKeybindObj(Table, "PlayerRefresh", Keybinds::PlayerRefresh);
+	DeserializeKeybindObj(Table, "Aimbot", Keybinds::Aimbot);
+	DeserializeKeybindObj(Table, "FuserLoot", Keybinds::FuserLoot);
+	DeserializeKeybindObj(Table, "ForceExit", Keybinds::ForceExit);
+}
+
+static json SerializeKeybindEntryObj(const CKeybind& kb) {
+	return json{
+		{ "m_Key", kb.m_Key },
+		{ "m_bTargetPC", kb.m_bTargetPC },
+		{ "m_bRadarPC", kb.m_bRadarPC }
+	};
+}
+
+json Config::SerializeKeybind(json& j) {
+	j["Keybinds"] = {
+		{ "DMARefresh", SerializeKeybindEntryObj(Keybinds::DMARefresh) },
+		{ "PlayerRefresh", SerializeKeybindEntryObj(Keybinds::PlayerRefresh) },
+		{ "Aimbot", SerializeKeybindEntryObj(Keybinds::Aimbot) },
+		{ "FuserLoot", SerializeKeybindEntryObj(Keybinds::FuserLoot) },
+		{ "ForceExit", SerializeKeybindEntryObj(Keybinds::ForceExit) }
+	};
+	return j;
+}
+
+json Config::SerializeConfig() {
 	json j;
 
 	j["Aimbot"] = {
@@ -128,7 +163,7 @@ json Config::SerializeCheatConfig() {
 		{"fDampen", Aimbot::fDampen},
 		{"fPixelFOV", Aimbot::fPixelFOV},
 		{"fDeadzoneFov", Aimbot::fDeadzoneFov},
-		{"m_Keybind", Aimbot::m_Keybind}
+		{"bAutoConnect", Aimbot::bAutoConnect}
 	};
 
 	j["Fuser"] = {
@@ -159,7 +194,6 @@ json Config::SerializeCheatConfig() {
 		{"fScale", Radar::fScale},
 		{"fLocalViewRayLength", Radar::fLocalViewRayLength},
 		{"fOtherViewRayLength", Radar::fOtherViewRayLength},
-		{"m_RadarBackgroundColor", static_cast<uint32_t>(Radar::m_RadarBackgroundColor)},
 	};
 
 	j["Colors"] = {
@@ -170,19 +204,16 @@ json Config::SerializeCheatConfig() {
 		{"m_BossColor", static_cast<uint32_t>(ColorPicker::m_BossColor)},
 		{"m_LootColor", static_cast<uint32_t>(ColorPicker::m_LootColor)},
 		{"m_ValuableLootColor", static_cast<uint32_t>(ColorPicker::m_ValuableLootColor)},
+		{"m_RadarBackgroundColor", static_cast<uint32_t>(ColorPicker::m_RadarBackgroundColor)},
 
 	};
 
-	j["Keybinds"] = {
-		{"m_ForceExitHotkey", Keybinds::m_ForceExitHotkey},
-		{"m_RefreshPlayerList", Keybinds::m_RefreshPlayerList},
-
-	};
+	SerializeKeybind(j);
 
 	return j;
 }
 
-void Config::DeserializeCheatConfig(const json& j) {
+void Config::DeserializeConfig(const json& j) {
 
 	if (j.contains("Aimbot")) {
 		const auto& aimbotTable = j["Aimbot"];
@@ -202,8 +233,8 @@ void Config::DeserializeCheatConfig(const json& j) {
 		if (aimbotTable.contains("fDeadzoneFov")) {
 			Aimbot::fDeadzoneFov = aimbotTable["fDeadzoneFov"].get<float>();
 		}
-		if (aimbotTable.contains("m_Keybind")) {
-			Aimbot::m_Keybind = aimbotTable["m_Keybind"].get<uint32_t>();
+		if (aimbotTable.contains("bAutoConnect")) {
+			Aimbot::bAutoConnect = aimbotTable["bAutoConnect"].get<bool>();
 		}
 	}
 
@@ -279,9 +310,6 @@ void Config::DeserializeCheatConfig(const json& j) {
 		if (radarTable.contains("fOtherViewRayLength")) {
 			Radar::fOtherViewRayLength = radarTable["fOtherViewRayLength"].get<float>();
 		}
-		if (radarTable.contains("m_RadarBackgroundColor")) {
-			Radar::m_RadarBackgroundColor = radarTable["m_RadarBackgroundColor"].get<ImU32>();
-		}
 	}
 
 	if (j.contains("Colors")) {
@@ -308,24 +336,17 @@ void Config::DeserializeCheatConfig(const json& j) {
 		if (colorsTable.contains("m_ValuableLootColor")) {
 			ColorPicker::m_ValuableLootColor = colorsTable["m_ValuableLootColor"].get<ImU32>();
 		}
-	}
-
-	if (j.contains("Keybinds")) {
-		const auto& KeybindsTable = j["Colors"];
-
-		if (KeybindsTable.contains("m_ForceExitHotkey")) {
-			Keybinds::m_ForceExitHotkey = KeybindsTable["m_ForceExitHotkey"].get<uint32_t>();
-		}
-		if (KeybindsTable.contains("m_RefreshPlayerList")) {
-			Keybinds::m_RefreshPlayerList = KeybindsTable["m_RefreshPlayerList"].get<uint32_t>();
+		if (colorsTable.contains("m_RadarBackgroundColor")) {
+			ColorPicker::m_RadarBackgroundColor = colorsTable["m_RadarBackgroundColor"].get<ImU32>();
 		}
 	}
 
+	DeserializeKeybind(j["Keybinds"]);
 }
 
 void Config::SaveConfig(const std::string& configName) {
 	std::println("[Config] Saving config: {}", configName);
-	json j = SerializeCheatConfig();
+	json j = SerializeConfig();
 	std::ofstream file(getConfigPath(configName));
 	if (!file.is_open())
 		return;
@@ -350,6 +371,6 @@ bool Config::LoadConfig(const std::string& configName) {
 		return false;
 	}
 	file.close();
-	DeserializeCheatConfig(j);
+	DeserializeConfig(j);
 	return true;
 }

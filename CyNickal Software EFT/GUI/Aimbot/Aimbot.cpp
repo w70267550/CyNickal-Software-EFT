@@ -7,9 +7,18 @@
 
 void Aimbot::RenderSettings()
 {
-	//if (!bSettings) return;
-
-	//ImGui::Begin("Aimbot Settings", &bSettings);
+	static bool bFirstFrame{ false };
+	if (!bFirstFrame)
+	{
+		if (bAutoConnect)
+		{
+			if (m_Device.isConnected() == false)
+			{
+				m_Device.connect();
+			}
+		}
+		bFirstFrame = true;
+	}
 
 	if (m_Device.isConnected() == false)
 	{
@@ -17,8 +26,9 @@ void Aimbot::RenderSettings()
 	}
 	else
 	{
-		ImGui::Text("Makcu Device Connected: %s", m_Device.getDeviceInfo().port.c_str());
+		ImGui::TextColored(ImColor(0,255,0), "Makcu Device Connected: %s", m_Device.getDeviceInfo().port.c_str());
 		if (ImGui::Button("Disconnect Makcu Device")) m_Device.disconnect();
+		ImGui::SameLine();
 		if (ImGui::Button("Test Mouse Move")) m_Device.mouseMove(100, 100);
 	}
 
@@ -27,9 +37,7 @@ void Aimbot::RenderSettings()
 	ImGui::SliderFloat("Dampen", &fDampen, 0.01f, 1.0f);
 	ImGui::SliderFloat("FOV", &fPixelFOV, 1.0f, 300.0f);
 	ImGui::SliderFloat("Deadzone FOV", &fDeadzoneFov, 1.0f, 10.0f);
-	ImGui::InputScalar("Keybind", ImGuiDataType_U32, &m_Keybind);
-
-	//ImGui::End();
+	ImGui::Checkbox("Auto Connect", &bAutoConnect);
 }
 
 void Aimbot::RenderFOVCircle(const ImVec2& WindowPos, ImDrawList* DrawList)

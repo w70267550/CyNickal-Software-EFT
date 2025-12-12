@@ -11,13 +11,13 @@ bool GOM::Initialize(DMA_Connection* Conn)
 
 	uintptr_t pGOMAddress = Proc.GetUnityAddress() + Offsets::pGOM;
 	GameObjectManagerAddress = Proc.ReadMem<uintptr_t>(Conn, pGOMAddress);
-	std::println("GameObjectManager Address: 0x{:X}", GameObjectManagerAddress);
+	std::println("[GOM] GameObjectManager Address: 0x{:X}", GameObjectManagerAddress);
 
 	LastActiveNode = Proc.ReadMem<uintptr_t>(Conn, GameObjectManagerAddress + Offsets::CGameObjectManager::pLastActiveNode);
-	std::println("LastActiveNode Address: 0x{:X}", LastActiveNode);
+	std::println("[GOM] LastActiveNode Address: 0x{:X}", LastActiveNode);
 
 	ActiveNodes = Proc.ReadMem<uintptr_t>(Conn, GameObjectManagerAddress + Offsets::CGameObjectManager::pActiveNodes);
-	std::println("ActiveNodes Address: 0x{:X}", ActiveNodes);
+	std::println("[GOM] ActiveNodes Address: 0x{:X}", ActiveNodes);
 
 	GetObjectAddresses(Conn, 10000);
 
@@ -54,7 +54,7 @@ void GOM::GetObjectAddresses(DMA_Connection* Conn, uint32_t MaxNodes)
 
 		if (BytesRead != sizeof(CLinkedListEntry))
 		{
-			std::println("[EFT] UpdateObjectList; Incomplete read: {0:d}/{1:d} @ {2:X}", BytesRead, sizeof(CLinkedListEntry), CurrentActiveNode);
+			std::println("[GOM] UpdateObjectList; Incomplete read: {0:d}/{1:d} @ {2:X}", BytesRead, sizeof(CLinkedListEntry), CurrentActiveNode);
 			break;
 		}
 
@@ -62,13 +62,13 @@ void GOM::GetObjectAddresses(DMA_Connection* Conn, uint32_t MaxNodes)
 
 		if (NodeEntry.pNextEntry == FirstNode)
 		{
-			std::println("[EFT] UpdateObjectList; Reached back to first node, ending traversal.");
+			std::println("[GOM] UpdateObjectList; Reached back to first node, ending traversal.");
 			break;
 		}
 
 		if (NodeEntry.pNextEntry == 0)
 		{
-			std::println("[EFT] UpdateObjectList; Next entry is null, ending traversal.");
+			std::println("[GOM] UpdateObjectList; Next entry is null, ending traversal.");
 			break;
 		}
 
@@ -78,7 +78,7 @@ void GOM::GetObjectAddresses(DMA_Connection* Conn, uint32_t MaxNodes)
 
 	auto EndTime = std::chrono::high_resolution_clock::now();
 	auto Duration = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
-	std::println("[EFT] UpdateObjectList; {} nodes in {}ms", NodeCount, Duration);
+	std::println("[GOM] UpdateObjectList; {} nodes in {}ms", NodeCount, Duration);
 }
 
 std::vector<uintptr_t> GOM::GetGameWorldAddresses(DMA_Connection* Conn)
@@ -89,7 +89,7 @@ std::vector<uintptr_t> GOM::GetGameWorldAddresses(DMA_Connection* Conn)
 	{
 		if (ObjInfo.m_ObjectName == "GameWorld")
 		{
-			std::println("[EFT] GameWorld Address: 0x{:X}", ObjInfo.m_ObjectAddress);
+			std::println("[GOM] GameWorld Address: 0x{:X}", ObjInfo.m_ObjectAddress);
 			GameWorldAddresses.push_back(ObjInfo.m_ObjectAddress);
 		}
 	}
@@ -113,12 +113,12 @@ uintptr_t GOM::GetLocalGameWorldAddr(DMA_Connection* Conn)
 		if (MainPlayerAddr)
 		{
 			m_MainPlayerAddress = MainPlayerAddr;
-			std::println("[EFT] LocalGameWorld Address: 0x{:X}\n", LocalWorldAddr);
+			std::println("[GOM] LocalGameWorld Address: 0x{:X}", LocalWorldAddr);
 			return LocalWorldAddr;
 		}
 	}
 
-	throw std::runtime_error("Failed to find valid LocalGameWorld address.");
+	throw std::runtime_error("[GOM] Failed to find valid LocalGameWorld address.");
 }
 
 void GOM::DumpAllObjectsToFile(const std::string& FileName)
@@ -126,14 +126,14 @@ void GOM::DumpAllObjectsToFile(const std::string& FileName)
 	std::ofstream OutFile(FileName, std::ios::out | std::ios::trunc);
 	if (!OutFile.is_open())
 	{
-		std::println("[EFT] DumpAllObjectsToFile; Failed to open file: {}", FileName);
+		std::println("[GOM] DumpAllObjectsToFile; Failed to open file: {}", FileName);
 		return;
 	}
 
 	for (int i = 0; i < m_ObjectInfo.size(); i++)
 	{
 		auto& ObjInfo = m_ObjectInfo[i];
-		OutFile << std::format("Entity #{0:d} @ {1:X} named `{2:s}`", i, ObjInfo.m_ObjectAddress, ObjInfo.m_ObjectName.c_str()) << std::endl;
+		OutFile << std::format("[GOM] Entity #{0:d} @ {1:X} named `{2:s}`", i, ObjInfo.m_ObjectAddress, ObjInfo.m_ObjectName.c_str()) << std::endl;
 	}
 
 	OutFile.close();

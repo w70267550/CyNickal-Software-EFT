@@ -11,7 +11,7 @@ void Fuser::Render()
 	ImGui::SetNextWindowSize(Fuser::m_ScreenSize);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 255.0f));
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-	ImGui::Begin("Fuser", nullptr, ImGuiWindowFlags_NoDecoration);
+	ImGui::Begin("Fuser", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 	auto WindowPos = ImGui::GetWindowPos();
 	auto DrawList = ImGui::GetWindowDrawList();
 

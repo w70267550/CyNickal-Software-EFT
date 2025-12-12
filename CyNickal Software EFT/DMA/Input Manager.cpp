@@ -136,7 +136,7 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 			{
 				if (!VMMDLL_Map_GetModuleFromNameW(Conn->GetHandle(), pid, const_cast<LPWSTR>(L"win32k.sys"), &win32k_module_info, VMMDLL_MODULE_FLAG_NORMAL))
 				{
-					std::println("failed to get module win32k info");
+					std::println("[Input Manager] failed to get module win32k info");
 					return false;
 				}
 			}
@@ -150,7 +150,7 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 				g_session_ptr = FindSignature(Conn, "48 8B 05 ? ? ? ? FF C9", win32k_base, win32k_base + win32k_size, pid);
 				if (!g_session_ptr)
 				{
-					std::println("failed to find g_session_global_slots");
+					std::println("[Input Manager] failed to find g_session_global_slots");
 					return false;
 				}
 			}
@@ -177,7 +177,7 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 			PVMMDLL_MAP_MODULEENTRY win32kbase_module_info;
 			if (!VMMDLL_Map_GetModuleFromNameW(Conn->GetHandle(), pid, const_cast<LPWSTR>(L"win32kbase.sys"), &win32kbase_module_info, VMMDLL_MODULE_FLAG_NORMAL))
 			{
-				std::println("failed to get module win32kbase info");
+				std::println("[Input Manager] failed to get module win32kbase info");
 				return false;
 			}
 			uintptr_t win32kbase_base = win32kbase_module_info->vaBase;
@@ -196,7 +196,7 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 			}
 			else
 			{
-				std::println("failed to find offset for gafAyncKeyStateExport");
+				std::println("[Input Manager] failed to find offset for gafAyncKeyStateExport");
 				return false;
 			}
 
@@ -204,7 +204,9 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 		}
 		if (gafAsyncKeyStateExport > 0x7FFFFFFFFFFF)
 		{
-			std::println("Found Keyboard at: 0x%p\n", gafAsyncKeyStateExport);
+			std::println("[Input Manager] Found Keyboard");
+			std::println("[Input Manager] Window Version: {} {} UBR: {}", (Winver >= 22000) ? "11" : "10", Winver, Winver, Ubr);
+			WindowsVersion = Winver;
 			m_bInitialized = true;
 			return true;
 		}
@@ -248,27 +250,29 @@ bool c_keys::InitKeyboard(DMA_Connection* Conn)
 			auto result = VMMDLL_Map_GetModuleFromNameW(Conn->GetHandle(), PID | VMMDLL_PID_PROCESS_WITH_KERNELMEMORY, static_cast<LPCWSTR>(L"win32kbase.sys"), &module_info, VMMDLL_MODULE_FLAG_NORMAL);
 			if (!result)
 			{
-				std::println("failed to get module info");
+				std::println("[Input Manager] failed to get module info");
 				return false;
 			}
 
 			char str[261];
 			if (!VMMDLL_PdbLoad(Conn->GetHandle(), PID | VMMDLL_PID_PROCESS_WITH_KERNELMEMORY, module_info->vaBase, str))
 			{
-				std::println("failed to load pdb");
+				std::println("[Input Manager] failed to load pdb");
 				return false;
 			}
 
 			uintptr_t gafAsyncKeyState;
 			if (!VMMDLL_PdbSymbolAddress(Conn->GetHandle(), str, const_cast<LPSTR>("gafAsyncKeyState"), &gafAsyncKeyState))
 			{
-				std::println("failed to find gafAsyncKeyState");
+				std::println("[Input Manager] failed to find gafAsyncKeyState");
 				return false;
 			}
 		}
 		if (gafAsyncKeyStateExport > 0x7FFFFFFFFFFF)
 		{
-			std::println("Found Keyboard at: 0x%p", gafAsyncKeyStateExport);
+			std::println("[Input Manager] Found Keyboard");
+			std::println("[Input Manager] Window Version: {} {} UBR: {}", (Winver >= 22000) ? "11" : "10", Winver, Winver, Ubr);
+			WindowsVersion = Winver;
 			m_bInitialized = true;
 			return true;
 		}

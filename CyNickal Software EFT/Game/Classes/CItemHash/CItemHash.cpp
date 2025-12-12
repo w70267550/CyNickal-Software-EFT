@@ -83,6 +83,8 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x90AE7785, "AK-101"},
 	{0xA0A73DBA, "AKS-74N" },
 	{0x955BAEC7, "KBP 9A-91"},
+	{0x01C63A94, "MP5"},
+	
 
 	/* Other items */
 	{0x7107CDBF, "Power Cord"},
@@ -118,7 +120,8 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x6BFF0CB3, "Car Battery"},
 	{0x07CC0C28, "TNT Brick"},
 	{0x6B4F9B4C, "Hose"},
-	{0x084E8F81, "Plexiglass" },
+	{0x084E8F81, "Plexiglass"},
+	{0x587540E6, "Insulating Tape"},
 
 	/* Food & Drinks */
 	{0x7231B1A4, "Water"},
@@ -161,10 +164,13 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0xBD7F0D0D, "Static Corpse"},
 	{0x70DE4832, "Static Corpse"},
 	{0xCF4CD897, "Static Corpse"},
+	{0x77085969, "Static Corpse"}, 
+	{0x09C00987, "Static Corpse"},
+	{0xE8F9D1F2, "Static Corpse"},
 	{0xA9904ABD, "Ammo Crate"},
 	{0x84CAE97A, "Weapon Box"},
 	{0x51C1387F, "Weapon Box" },
-	{0x64941E79, "Grenade Box" },
+	{0x64941E79, "Grenade Box"},
 	{0x3084DB15, "Medcase"},
 	
 };

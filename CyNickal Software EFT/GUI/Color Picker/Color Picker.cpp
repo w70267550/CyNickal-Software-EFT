@@ -11,6 +11,7 @@ void ColorPicker::Render()
 	MyColorPicker("Local Player Color", m_LocalPlayerColor);
 	MyColorPicker("Loot Color", m_LootColor);
 	MyColorPicker("Valuable Loot Color", m_ValuableLootColor);
+	MyColorPicker("Radar Background Color", m_RadarBackgroundColor);
 }
 
 void ColorPicker::MyColorPicker(const char* label, ImColor& color)

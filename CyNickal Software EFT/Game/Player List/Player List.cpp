@@ -241,7 +241,7 @@ void PlayerList::GetPlayerAddresses(DMA_Connection* Conn, std::vector<uintptr_t>
 			auto& ObjName = ObjectNames[i];
 			auto& ObjAddress = UniqueObjectAddresses[i];
 
-			std::println("Object {0:X} is type '{1:s}'", ObjAddress, ObjName.Name);
+			std::println("[PlayerList] Object 0x{0:X} is type '{1:s}'", ObjAddress, ObjName.Name);
 			NameMap[ObjAddress] = std::string(ObjName.Name);
 		}
 	}

@@ -12,16 +12,20 @@
 
 void MainMenu::Render()
 {
-
-	ImGui::SetNextWindowSize(ImVec2(700, 550), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(900, 550), ImGuiCond_Once);
 
 	// Prevent Moving out of window
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize;
 
 	ImGui::Begin("EFT DMA - CyNickal", nullptr, window_flags);
 
 	if (ImGui::BeginTabBar("MenuTabs"))
 	{
+		if (ImGui::BeginTabItem("Aimbot"))
+		{
+			Aimbot::RenderSettings();
+			ImGui::EndTabItem();
+		}
 		if (ImGui::BeginTabItem("Fuser"))
 		{
 			Fuser::RenderSettings();
@@ -32,14 +36,14 @@ void MainMenu::Render()
 			Radar::RenderSettings();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Aimbot"))
-		{
-			Aimbot::RenderSettings();
-			ImGui::EndTabItem();
-		}
 		if (ImGui::BeginTabItem("Color Picker"))
 		{
 			ColorPicker::Render();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Keybinds"))
+		{
+			Keybinds::Render();
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Configs"))
@@ -55,11 +59,6 @@ void MainMenu::Render()
 		if (ImGui::BeginTabItem("Loot Table"))
 		{
 			LootTable::Render();
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Keybinds"))
-		{
-			Keybinds::Render();
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();

@@ -20,7 +20,7 @@ void Radar::Render()
 	ImVec2 RectTopLeft = WindowPos;
 	ImVec2 RectBottomRight = ImVec2(WindowPos.x + WindowSize.x, WindowPos.y + WindowSize.y);
 
-	DrawList->AddRectFilled(RectTopLeft, RectBottomRight, m_RadarBackgroundColor);
+	DrawList->AddRectFilled(RectTopLeft, RectBottomRight, ColorPicker::m_RadarBackgroundColor);
 
 	DrawRadarLoot::DrawAll(WindowPos, WindowSize, DrawList);
 	DrawRadarPlayers::DrawAll(WindowPos, WindowSize, DrawList);
@@ -37,7 +37,4 @@ void Radar::RenderSettings()
 	ImGui::Checkbox("Local Player View Ray", &Radar::bLocalViewRay);
 	ImGui::Checkbox("Players View Rays", &Radar::bOtherPlayerViewRays);
 	ImGui::Checkbox("Loot", &DrawRadarLoot::bMasterToggle);
-
-	ImGui::SetNextItemWidth(150.0f);
-	ImGui::ColorEdit4("Radar Background Color", &m_RadarBackgroundColor.Value.x);
 }

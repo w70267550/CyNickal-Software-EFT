@@ -16,6 +16,8 @@ public:
 	static bool LoadConfig(const std::string& configName);
 
 private:
-	static json SerializeCheatConfig();
-	static void DeserializeCheatConfig(const json& j);
+	static void DeserializeKeybind(const json& Table);
+	static json SerializeKeybind(json& j);
+	static json SerializeConfig();
+	static void DeserializeConfig(const json& j);
 };

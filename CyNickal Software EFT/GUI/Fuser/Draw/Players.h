@@ -13,7 +13,7 @@ public:
 	static inline bool bNameText{ true };
 	static inline bool bSkeleton{ true };
 	static inline bool bHeadDot{ true };
-	static inline bool bBox{ true };
+	static inline bool bBox{ false };
 	static inline float fSkeletonThickness{ 2.0f };
 
 private:
@@ -22,7 +22,7 @@ private:
 	static void DrawPlayerWeapon(const CHeldItem* pHands, const ImVec2& WindowPos, ImDrawList* DrawList, uint8_t& LineNumber);
 	static void Draw(const CObservedPlayer& Player, const ImVec2& WindowPos, ImDrawList* DrawList);
 	static void Draw(const CClientPlayer& Player, const ImVec2& WindowPos, ImDrawList* DrawList);
-	static void DrawSkeleton(const CPlayerSkeleton& Skeleton, const ImVec2& WindowPos, ImDrawList* DrawList);
+	static void DrawSkeleton(const CPlayerSkeleton& Skeleton, const ImVec2& WindowPos, ImDrawList* DrawList, ImColor& Color);
 	static void DrawBox(const ImVec2& WindowPos, ImDrawList* DrawList, const ImColor& Color);
 	
 private:

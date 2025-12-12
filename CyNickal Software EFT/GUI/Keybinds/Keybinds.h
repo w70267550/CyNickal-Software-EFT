@@ -1,12 +1,32 @@
 #include "DMA/DMA.h"
 
+class CKeybind
+{
+public:
+	std::string m_Name{};
+	uint32_t m_Key{ 0 };
+	bool m_bTargetPC{ false };
+	bool m_bRadarPC{ false };
+	bool m_bWaitingForKey{ false };
+
+public:
+	void Render();
+	const bool IsActive(DMA_Connection* Conn);
+	static const char* VKCodeToString(uint32_t vkCode);
+};
+
 class Keybinds
 {
 public:
 	static void Render();
-	static void OnFrame(DMA_Connection* Conn, uintptr_t LocalGameWorld);
+	static void OnFrame(DMA_Connection* Conn);
 
 public:
-	static inline uint32_t m_ForceExitHotkey = VK_END;
-	static inline uint32_t m_RefreshPlayerList = VK_INSERT;
+	static inline CKeybind DMARefresh = { "DMA Refresh", VK_INSERT, true, true };
+	static inline CKeybind PlayerRefresh = { "Player Refresh", VK_HOME, true, true };
+	static inline CKeybind Aimbot = { "Aimbot", VK_XBUTTON2, true, false };
+	static inline CKeybind FuserLoot = { "Fuser Loot", 0x4E, true, true };
+	static inline CKeybind ForceExit = { "Force Exit", VK_END, true, true };
+
+private:
 };

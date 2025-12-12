@@ -56,11 +56,16 @@ private:
 	static inline std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
 	static inline bool m_bInitialized = false;
+	static inline int WindowsVersion = 0;
 public:
 	static bool InitKeyboard(DMA_Connection* Conn);
 	const static bool IsInitialized()
 	{
 		return m_bInitialized;
+	}
+	const static int GetWindowsVersion()
+	{
+		return WindowsVersion;
 	}
 	static void UpdateKeys(DMA_Connection* Conn);
 	static bool IsKeyDown(DMA_Connection* Conn, uint32_t virtual_key_code);

@@ -30,7 +30,7 @@ void DMA_Thread_Main()
 
 	CTimer LightRefresh(std::chrono::seconds(30), [&Conn]() { Conn->LightRefresh(); });
 
-	CTimer Keybinds(std::chrono::milliseconds(10), [&Conn, &LocalGameWorldAddr]() { Keybinds::OnFrame(Conn, LocalGameWorldAddr); });
+	CTimer Keybinds(std::chrono::milliseconds(10), [&Conn]() { Keybinds::OnFrame(Conn); });
 
 	while (bRunning)
 	{

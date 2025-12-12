@@ -13,5 +13,4 @@ public:
 	static inline float fScale{ 0.5f };
 	static inline float fLocalViewRayLength{ 100.0f };
 	static inline float fOtherViewRayLength{ 33.0f };
-	static inline ImColor m_RadarBackgroundColor{ ImColor(0,0,0) };
 };

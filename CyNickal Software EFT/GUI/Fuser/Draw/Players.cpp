@@ -85,10 +85,11 @@ void DrawESPPlayers::Draw(const CObservedPlayer& Player, const ImVec2& WindowPos
 	for (int i = 0; i < SKELETON_NUMBONES; i++)
 		if (!Camera::WorldToScreen(Player.m_pSkeleton->m_BonePositions[i], m_ProjectedBoneCache[i])) return;
 
+	auto Color = Player.GetSideColor();
 	uint8_t LineNumber = 0;
 
 	if (bNameText) {
-		DrawGenericPlayerText(Player, WindowPos, DrawList, Player.GetSideColor(), LineNumber);
+		DrawGenericPlayerText(Player, WindowPos, DrawList, Color, LineNumber);
 		DrawPlayerWeapon(Player.m_pHands.get(), WindowPos, DrawList, LineNumber);
 		DrawObservedPlayerHealthText(Player, WindowPos, DrawList, LineNumber);
 	}
@@ -98,15 +99,15 @@ void DrawESPPlayers::Draw(const CObservedPlayer& Player, const ImVec2& WindowPos
 		auto& ProjectedRootPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
 		float dx = ProjectedHeadPos.x - ProjectedRootPos.x;
 		float dy = ProjectedHeadPos.y - ProjectedRootPos.y;
-		float radius = fmaxf(1.0f, sqrtf(dx * dx + dy * dy) / 8.5f);
-		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), radius, Player.GetSideColor(), 12, 1.0f);
+		float radius = fmaxf(1.0f, sqrtf(dx * dx + dy * dy) / 8.0f);
+		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), radius, Color, 12, fSkeletonThickness);
 	}
 
 	if (bSkeleton)
-		DrawSkeleton(*Player.m_pSkeleton, WindowPos, DrawList);
+		DrawSkeleton(*Player.m_pSkeleton, WindowPos, DrawList, Color);
 
 	if (bBox)
-		DrawBox(WindowPos, DrawList, ImColor(255,255,255,255));
+		DrawBox(WindowPos, DrawList, Color);
 }
 
 void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, ImDrawList* DrawList)
@@ -122,10 +123,11 @@ void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, 
 	for (int i = 0; i < SKELETON_NUMBONES; i++)
 		if (!Camera::WorldToScreen(Player.m_pSkeleton->m_BonePositions[i], m_ProjectedBoneCache[i])) return;
 
+	auto Color = Player.GetSideColor();
 	uint8_t LineNumber = 0;
 
 	if (bNameText) {
-		DrawGenericPlayerText(Player, WindowPos, DrawList, Player.GetSideColor(), LineNumber);
+		DrawGenericPlayerText(Player, WindowPos, DrawList, Color, LineNumber);
 		DrawPlayerWeapon(Player.m_pHands.get(), WindowPos, DrawList, LineNumber);
 	}
 
@@ -134,15 +136,15 @@ void DrawESPPlayers::Draw(const CClientPlayer& Player, const ImVec2& WindowPos, 
 		auto& ProjectedRootPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
 		float dx = ProjectedHeadPos.x - ProjectedRootPos.x;
 		float dy = ProjectedHeadPos.y - ProjectedRootPos.y;
-		float radius = fmaxf(1.0f, sqrtf(dx * dx + dy * dy) / 8.5f);
-		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), radius, Player.GetSideColor(), 12, 1.0f);
+		float radius = fmaxf(1.0f, sqrtf(dx * dx + dy * dy) / 8.0f);
+		DrawList->AddCircle(ImVec2(WindowPos.x + ProjectedHeadPos.x, WindowPos.y + ProjectedHeadPos.y), radius, Color, 12, 1.0f);
 	}
 
 	if (bSkeleton)
-		DrawSkeleton(*Player.m_pSkeleton, WindowPos, DrawList);
+		DrawSkeleton(*Player.m_pSkeleton, WindowPos, DrawList, Color);
 
 	if (bBox)
-		DrawBox(WindowPos, DrawList, ImColor(255, 255, 255, 255));
+		DrawBox(WindowPos, DrawList, Color);
 }
 
 void ConnectBones(const Vector2& BoneA, const Vector2& BoneB, const ImVec2& WindowPos, ImDrawList* DrawList, const ImColor& Color, float Thickness)
@@ -155,7 +157,7 @@ void ConnectBones(const Vector2& BoneA, const Vector2& BoneB, const ImVec2& Wind
 	);
 }
 
-void DrawESPPlayers::DrawSkeleton(const CPlayerSkeleton& Skeleton, const ImVec2& WindowPos, ImDrawList* DrawList)
+void DrawESPPlayers::DrawSkeleton(const CPlayerSkeleton& Skeleton, const ImVec2& WindowPos, ImDrawList* DrawList, ImColor& Color)
 {
 	auto& ProjectedHead = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Head]];
 	auto& ProjectedNeck = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Neck]];
@@ -178,25 +180,25 @@ void DrawESPPlayers::DrawSkeleton(const CPlayerSkeleton& Skeleton, const ImVec2&
 	auto& ProjectedLForeArm2 = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::LForeArm2]];
 	auto& ProjectedLPalm = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::LPalm]];
 
-	ConnectBones(ProjectedHead, ProjectedNeck, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedNeck, ProjectedSpine, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedSpine, ProjectedPelvis, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedPelvis, ProjectedLThigh1, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedLThigh1, ProjectedLThigh2, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedLThigh2, ProjectedLCalf, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedLCalf, ProjectedLFoot, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedPelvis, ProjectedRThigh1, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedRThigh1, ProjectedRThigh2, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedRThigh2, ProjectedRCalf, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedRCalf, ProjectedRFoot, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedSpine, ProjectedRUpperArm, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedRUpperArm, ProjectedRForeArm1, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedRForeArm1, ProjectedRForeArm2, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedRForeArm2, ProjectedRPalm, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedSpine, ProjectedLUpperArm, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedLUpperArm, ProjectedLForeArm1, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedLForeArm1, ProjectedLForeArm2, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
-	ConnectBones(ProjectedLForeArm2, ProjectedLPalm, WindowPos, DrawList, ImColor(255, 0, 0), fSkeletonThickness);
+	ConnectBones(ProjectedHead, ProjectedNeck, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedNeck, ProjectedSpine, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedSpine, ProjectedPelvis, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedPelvis, ProjectedLThigh1, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedLThigh1, ProjectedLThigh2, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedLThigh2, ProjectedLCalf, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedLCalf, ProjectedLFoot, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedPelvis, ProjectedRThigh1, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedRThigh1, ProjectedRThigh2, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedRThigh2, ProjectedRCalf, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedRCalf, ProjectedRFoot, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedSpine, ProjectedRUpperArm, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedRUpperArm, ProjectedRForeArm1, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedRForeArm1, ProjectedRForeArm2, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedRForeArm2, ProjectedRPalm, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedSpine, ProjectedLUpperArm, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedLUpperArm, ProjectedLForeArm1, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedLForeArm1, ProjectedLForeArm2, WindowPos, DrawList, Color, fSkeletonThickness);
+	ConnectBones(ProjectedLForeArm2, ProjectedLPalm, WindowPos, DrawList, Color, fSkeletonThickness);
 }
 
 void DrawESPPlayers::DrawBox(const ImVec2& WindowPos, ImDrawList* DrawList, const ImColor& Color)

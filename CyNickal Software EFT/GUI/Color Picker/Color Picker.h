@@ -16,5 +16,6 @@ public:
 	static inline ImColor m_BossColor{ ImColor(225,0,225) };
 	static inline ImColor m_LootColor{ ImColor(0,150,150) };
 	static inline ImColor m_ValuableLootColor{ ImColor(252,15,192) };
+	static inline ImColor m_RadarBackgroundColor{ ImColor(0,0,0) };
 
 };
