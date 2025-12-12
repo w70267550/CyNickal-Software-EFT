@@ -5,7 +5,6 @@
 #include "Game/Player List/Player List.h"
 #include "Game/GOM/GOM.h"
 #include "Game/Camera/Camera.h"
-#include "GUI/Aimbot/Aimbot.h"
 #include "GUI/Keybinds/Keybinds.h"
 
 extern std::atomic<bool> bRunning;
