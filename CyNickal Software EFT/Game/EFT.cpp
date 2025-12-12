@@ -7,7 +7,7 @@
 
 bool EFT::Initialize(DMA_Connection* Conn)
 {
-	std::println("Initializing EFT module...");
+	std::println("[DMA] Initializing EFT module...");
 
 	Proc.GetProcessInfo(Conn);
 

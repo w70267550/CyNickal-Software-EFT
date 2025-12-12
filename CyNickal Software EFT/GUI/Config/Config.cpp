@@ -10,6 +10,7 @@
 #include "GUI/Radar/Radar.h"
 #include "GUI/Fuser/Draw/Loot.h"
 #include "GUI/Fuser/Draw/Players.h"
+#include "GUI/Keybinds/Keybinds.h"
 
 std::string Config::getConfigDir() {
 	char path[MAX_PATH];
@@ -138,6 +139,7 @@ json Config::SerializeCheatConfig() {
 		{"Player", {
 			{"bNameText", DrawESPPlayers::bNameText},
 			{"bSkeleton", DrawESPPlayers::bSkeleton},
+			{"fSkeletonThickness", DrawESPPlayers::fSkeletonThickness},
 			{"bHeadDot", DrawESPPlayers::bHeadDot},
 			{"bBox", DrawESPPlayers::bBox},
 		}},
@@ -168,6 +170,12 @@ json Config::SerializeCheatConfig() {
 		{"m_BossColor", static_cast<uint32_t>(ColorPicker::m_BossColor)},
 		{"m_LootColor", static_cast<uint32_t>(ColorPicker::m_LootColor)},
 		{"m_ValuableLootColor", static_cast<uint32_t>(ColorPicker::m_ValuableLootColor)},
+
+	};
+
+	j["Keybinds"] = {
+		{"m_ForceExitHotkey", Keybinds::m_ForceExitHotkey},
+		{"m_RefreshPlayerList", Keybinds::m_RefreshPlayerList},
 
 	};
 
@@ -223,6 +231,9 @@ void Config::DeserializeCheatConfig(const json& j) {
 			}
 			if (PlayerTable.contains("bSkeleton")) {
 				DrawESPPlayers::bSkeleton = PlayerTable["bSkeleton"].get<bool>();
+			}
+			if (PlayerTable.contains("fSkeletonThickness")) {
+				DrawESPPlayers::fSkeletonThickness = PlayerTable["fSkeletonThickness"].get<float>();
 			}
 			if (PlayerTable.contains("bHeadDot")) {
 				DrawESPPlayers::bHeadDot = PlayerTable["bHeadDot"].get<bool>();
@@ -299,10 +310,21 @@ void Config::DeserializeCheatConfig(const json& j) {
 		}
 	}
 
+	if (j.contains("Keybinds")) {
+		const auto& KeybindsTable = j["Colors"];
+
+		if (KeybindsTable.contains("m_ForceExitHotkey")) {
+			Keybinds::m_ForceExitHotkey = KeybindsTable["m_ForceExitHotkey"].get<uint32_t>();
+		}
+		if (KeybindsTable.contains("m_RefreshPlayerList")) {
+			Keybinds::m_RefreshPlayerList = KeybindsTable["m_RefreshPlayerList"].get<uint32_t>();
+		}
+	}
+
 }
 
 void Config::SaveConfig(const std::string& configName) {
-	std::println("[+] Saving config: {}", configName);
+	std::println("[Config] Saving config: {}", configName);
 	json j = SerializeCheatConfig();
 	std::ofstream file(getConfigPath(configName));
 	if (!file.is_open())
@@ -312,11 +334,11 @@ void Config::SaveConfig(const std::string& configName) {
 }
 
 bool Config::LoadConfig(const std::string& configName) {
-	std::println("[+] Loading config: {}", configName);
+	std::println("[Config] Loading config: {}", configName);
 	std::ifstream file(getConfigPath(configName));
 	if (!file.is_open())
 	{
-		std::println("[#] Failed to open config file: {}", getConfigPath(configName));
+		std::println("[Config] Failed to open config file: {}", getConfigPath(configName));
 		return false;
 	}
 	json j;

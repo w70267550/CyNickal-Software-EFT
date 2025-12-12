@@ -27,7 +27,7 @@ bool DMA_Connection::EndConnection()
 
 DMA_Connection::DMA_Connection()
 {
-	std::println("[-] Connecting to DMA...");
+	std::println("[DMA] Connecting to DMA...");
 
 	LPCSTR args[8] = { "", "-device", "fpga://algo=0", "-norefresh" };
 	DWORD argc = 4;
@@ -39,18 +39,18 @@ DMA_Connection::DMA_Connection()
 		bool dumped = false;
 		if (!std::filesystem::exists(path))
 		{
-			std::println("[+] Dumping memory map to {}...", path);
+			std::println("[DMA] Dumping memory map to {}...", path);
 			dumped = this->DumpMemoryMap(false);
 		}
 		else
 		{
-			std::println("[+] Memory map file {} already exists. No need to dump", path);
+			std::println("[DMA] Memory map file {} already exists. No need to dump", path);
 			dumped = true;
 		}
 
 		if (!dumped)
 		{
-			std::println("[#] Failed to dump memory map.");
+			std::println("[DMA] Failed to dump memory map.");
 		}
 		else
 		{
@@ -67,10 +67,10 @@ DMA_Connection::DMA_Connection()
 	// Get FPGA check Validation
 	if (!this->GetFPGAInfo())
 	{
-		std::println("[#] FPGA validation failed. Disconnecting...");
+		std::println("[DMA] FPGA validation failed. Disconnecting...");
 	}
 
-	std::println("[+] Connected to DMA!");
+	std::println("[DMA] Connected to DMA!");
 }
 
 DMA_Connection::~DMA_Connection()
@@ -79,7 +79,7 @@ DMA_Connection::~DMA_Connection()
 
 	m_VMMHandle = nullptr;
 
-	std::println("Disconnected from DMA!");
+	std::println("[DMA] Disconnected from DMA!");
 }
 
 bool DMA_Connection::GetFPGAInfo()
@@ -93,7 +93,7 @@ bool DMA_Connection::GetFPGAInfo()
 		VMMDLL_ConfigGet(this->m_VMMHandle, LC_OPT_FPGA_FPGA_ID, &FPGA_ID);
 		VMMDLL_ConfigGet(this->m_VMMHandle, LC_OPT_FPGA_DEVICE_ID, &DEVICE_ID);
 
-		std::println("[+] FPGA ID: {}, Device ID: {} Version: {}.{}", FPGA_ID, DEVICE_ID, qwVersionMajor, qwVersionMinor);
+		std::println("[DMA] FPGA ID: {}, Device ID: {} Version: {}.{}", FPGA_ID, DEVICE_ID, qwVersionMajor, qwVersionMinor);
 
 		if ((qwVersionMajor >= 4) && ((qwVersionMajor >= 5) || (qwVersionMinor >= 7)))
 		{
@@ -110,7 +110,7 @@ bool DMA_Connection::GetFPGAInfo()
 	}
 	else
 	{
-		std::println("[#] Failed to get FPGA Info.");
+		std::println("[DMA] Failed to get FPGA Info.");
 		return false;
 	}
 	return true;
@@ -142,7 +142,7 @@ bool DMA_Connection::DumpMemoryMap(bool debug)
 
 		if (pPhysMemMap->cMap == 0)
 		{
-			std::println("[#] No physical memory map entries found.");
+			std::println("[DMA] No physical memory map entries found.");
 			VMMDLL_MemFree(pPhysMemMap);
 			VMMDLL_Close(handle);
 			return false;
@@ -167,8 +167,15 @@ bool DMA_Connection::DumpMemoryMap(bool debug)
 	return true;
 }
 
-void DMA_Connection::LightRefreshWrapper(DMA_Connection* Conn)
+void DMA_Connection::LightRefresh()
 {
-	VMMDLL_ConfigSet(Conn->GetHandle(), VMMDLL_OPT_REFRESH_FREQ_MEM_PARTIAL, 1);
-	std::println("[+] Performed partial cache refresh on DMA.");
+	VMMDLL_ConfigSet(m_VMMHandle, VMMDLL_OPT_REFRESH_FREQ_MEM_PARTIAL, 1);
+	std::println("[DMA] Performed partial cache refresh.");
+}
+
+
+void DMA_Connection::FullRefresh()
+{
+	VMMDLL_ConfigSet(m_VMMHandle, VMMDLL_OPT_REFRESH_ALL, 1);
+	std::println("[DMA] Performed full cache refresh.");
 }

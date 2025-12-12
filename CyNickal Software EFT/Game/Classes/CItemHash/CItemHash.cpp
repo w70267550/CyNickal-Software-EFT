@@ -5,8 +5,8 @@
 const std::unordered_map<uint32_t, std::string> gItemNames
 {
 	// Guns
-	{0xBFA7DBD, "Saiga-12k"},
-	{0x32142AA, "TOZ KS-23M"},
+	{0x0BFA7DBD, "Saiga-12k"},
+	{0x032142AA, "TOZ KS-23M"},
 	{0xAE4D2212, "TOZ-106"},
 	{0x68103A98, "MP-155"},
 	{0xED31C50B, "MP-153"},
@@ -82,6 +82,8 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0xC049E7C8, "PP-91-01"},
 	{0xFC820774, "MPX"},
 	{0x90AE7785, "AK-101"},
+	{0xA0A73DBA, "AKS-74N" },
+	{0x955BAEC7, "KBP 9A-91"},
 
 	/* Other items */
 	{0x7107CDBF, "Power Cord"},
@@ -123,13 +125,19 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x7104340F, "KEK"},
 	{0x3E82F634, "Sprats"},
 	{0x557EC52, "Noodles"},
-	{0xA693CCB6, "Alyonka" },
-	{ 0x557EC52, "Noodles" },
-	{ 0x557EC52, "Noodles" },
-	{ 0x557EC52, "Noodles" },
+	{0xA693CCB6, "Alyonka"},
+	{0x557EC52, "Noodles"},
+	{0x02BCECDE, "Propane"},
+	{0x797842E5, "Soap"},
+	{0xF009B83A, "WD-40"},
+	{0x1D0DA675, "Meds Pile"},
+	{0x05B8E4FF, "Iskra"},
+	{0xFFE332E5, "Wires"},
+	{0x6BFF0CB3, "Car Battery"},
+	{0x07CC0C28, "TNT Brick"},
+	{0x6B4F9B4C, "Hose"},
 	
-	
-	{0xA923BB33, "Medkit" },
+	{0xA923BB33, "Medkit"},
 	{0x900797A2, "Analgin Painkillers"},
 
 	/* Containers */
@@ -141,17 +149,21 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x9082B9FB, "Jacket"},
 	{0xAC53E66B, "Jacket"},
 	{0x19BE107F, "Filing Cabinet"},
-	{0xF8CFC1D, "Filing Cabinet"},
-	{0x1365F70, "Filing Cabinet"},
+	{0x0F8CFC1D, "Filing Cabinet"},
+	{0x01365F70, "Filing Cabinet"},
 	{0x37154B39, "Filing Cabinet"},
-	{0x8F9E34D, "Static Corpse"},
+	{0x08F9E34D, "Static Corpse"},
 	{0xFE8849CF, "Static Corpse"},
 	{0x71DF944E, "Static Corpse"},
 	{0x3B201746, "Static Corpse"},
+	{0xBD7F0D0D, "Static Corpse"},
+	{0x70DE4832, "Static Corpse"},
+	{0xCF4CD897, "Static Corpse"},
 	{0xA9904ABD, "Ammo Crate"},
 	{0x84CAE97A, "Weapon Box"},
 	{0x51C1387F, "Weapon Box" },
 	{0x64941E79, "Grenade Box" },
+	{0x3084DB15, "Medcase"},
 	
 };
 

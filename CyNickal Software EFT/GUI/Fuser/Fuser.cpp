@@ -30,6 +30,7 @@ void Fuser::RenderSettings()
 	ImGui::Checkbox("Master Toggle", &bMasterToggle);
 	ImGui::Checkbox("Player Names", &DrawESPPlayers::bNameText);
 	ImGui::Checkbox("Player Skeletons", &DrawESPPlayers::bSkeleton);
+	ImGui::SliderFloat("Skeleton Thickness", &DrawESPPlayers::fSkeletonThickness, 1.0f, 5.0f, "%.1f px");
 	ImGui::Checkbox("Player Boxes", &DrawESPPlayers::bBox);
 	ImGui::Checkbox("Player Head Dots", &DrawESPPlayers::bHeadDot);
 	ImGui::Checkbox("Loot", &DrawESPLoot::bMasterToggle);

@@ -6,7 +6,7 @@
 
 bool Process::GetProcessInfo(DMA_Connection* Conn)
 {
-	std::println("Waiting for process {}..", ConstStrings::Game);
+	std::println("[Process] Waiting for process {}..", ConstStrings::Game);
 
 	m_PID = 0;
 
@@ -16,7 +16,7 @@ bool Process::GetProcessInfo(DMA_Connection* Conn)
 
 		if (m_PID)
 		{
-			std::println("Found process `{}` with PID {}", ConstStrings::Game, m_PID);
+			std::println("[Process] Found process `{}` with PID {}", ConstStrings::Game, m_PID);
 			PopulateModules(Conn);
 			break;
 		}
@@ -68,7 +68,7 @@ bool Process::PopulateModules(DMA_Connection* Conn)
 	}
 
 	for (auto& [Name, Address] : m_Modules)
-		std::println("Module `{}` at address 0x{:X}", Name, Address);
+		std::println("[Process] Module `{}` at address 0x{:X}", Name, Address);
 
 	return false;
 }
