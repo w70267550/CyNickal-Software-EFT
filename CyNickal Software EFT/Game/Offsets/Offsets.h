@@ -155,11 +155,28 @@ namespace Offsets
 		inline constexpr std::ptrdiff_t pSpawnProfileData{ 0x3C0 };
 	}
 
+	/* EFT.InventoryLogic::StackSlot */
+	namespace CStackSlot
+	{
+		inline constexpr std::ptrdiff_t Max{ 0x10 };
+		inline constexpr std::ptrdiff_t pItems{ 0x18 };
+	}
+
+	/* EFT.InventoryLogic::Slot */
+	namespace CSlot
+	{
+		inline constexpr std::ptrdiff_t pContainedItem{ 0x48 };
+	}
+
 	/* namespace: EFT.InventoryLogic, class: Item : System::Object */
 	namespace CItem
 	{
+		inline constexpr std::ptrdiff_t StackCount{ 0x24 };
 		inline constexpr std::ptrdiff_t pTemplate{ 0x60 };
+		inline constexpr std::ptrdiff_t pMagslot{ 0xC8 };
+		inline constexpr std::ptrdiff_t pCartridges{ 0xA8 };
 	}
+
 	/* EFT::InventoryLogic::ItemTemplate */
 	namespace CItemTemplate
 	{

@@ -66,12 +66,55 @@ void CClientPlayer::PrepareRead_5(VMMDLL_SCATTER_HANDLE vmsh)
 	m_pHands->PrepareRead_4(vmsh);
 }
 
+void CClientPlayer::PrepareRead_6(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_6(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_5(vmsh);
+}
+
+void CClientPlayer::PrepareRead_7(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_7(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_6(vmsh);
+}
+
+void CClientPlayer::PrepareRead_8(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_8(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_7(vmsh);
+}
+
+void CClientPlayer::PrepareRead_9(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_9(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_8(vmsh);
+}
+
 void CClientPlayer::QuickRead(VMMDLL_SCATTER_HANDLE vmsh)
 {
 	CBaseEFTPlayer::QuickRead(vmsh, EPlayerType::eMainPlayer);
 
 	if (IsInvalid())
 		return;
+
+	if(m_pHands)
+		m_pHands->QuickRead(vmsh, EPlayerType::eMainPlayer);
 
 	VMMDLL_Scatter_PrepareEx(vmsh, m_MovementContextAddress + Offsets::CMovementContext::Rotation, sizeof(float), reinterpret_cast<BYTE*>(&m_Yaw), nullptr);
 	VMMDLL_Scatter_PrepareEx(vmsh, m_EntityAddress + Offsets::CPlayer::pHandsController, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HandsControllerAddress), nullptr);
@@ -83,8 +126,6 @@ void CClientPlayer::Finalize()
 
 	if (IsInvalid())
 		return;
-
-	m_pHands->Finalize();
 }
 
 void CClientPlayer::QuickFinalize()

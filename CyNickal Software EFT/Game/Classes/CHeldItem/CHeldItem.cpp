@@ -26,14 +26,25 @@ void CHeldItem::PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh)
 
 	m_HeldItem = CItem(m_HeldItemAddress);
 	m_HeldItem.PrepareRead_1(vmsh);
+
+	VMMDLL_Scatter_PrepareEx(vmsh, m_HeldItemAddress + Offsets::CItem::pMagslot, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_MagazineAddress), reinterpret_cast<DWORD*>(&m_BytesRead));
 }
 
 void CHeldItem::PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh)
 {
+	if (m_BytesRead != sizeof(uintptr_t))
+		SetInvalid();
+
 	if (m_HeldItem.IsInvalid())
 		SetInvalid();
 
 	if (IsInvalid()) return;
+
+	if (m_MagazineAddress)
+	{
+		m_pMagazine = std::make_unique<CMagazine>(m_MagazineAddress);
+		m_pMagazine->PrepareRead_1(vmsh);
+	}
 
 	m_HeldItem.PrepareRead_2(vmsh);
 }
@@ -45,7 +56,42 @@ void CHeldItem::PrepareRead_4(VMMDLL_SCATTER_HANDLE vmsh)
 
 	if (IsInvalid()) return;
 
+	if (m_pMagazine)
+		m_pMagazine->PrepareRead_2(vmsh);
+
 	m_HeldItem.PrepareRead_3(vmsh);
+}
+
+void CHeldItem::PrepareRead_5(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	if (IsInvalid()) return;
+
+	if (m_pMagazine)
+		m_pMagazine->PrepareRead_3(vmsh);
+}
+
+void CHeldItem::PrepareRead_6(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	if (IsInvalid()) return;
+
+	if (m_pMagazine)
+		m_pMagazine->PrepareRead_4(vmsh);
+}
+
+void CHeldItem::PrepareRead_7(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	if (IsInvalid()) return;
+
+	if (m_pMagazine)
+		m_pMagazine->PrepareRead_5(vmsh);
+}
+
+void CHeldItem::PrepareRead_8(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	if (IsInvalid()) return;
+
+	if (m_pMagazine)
+		m_pMagazine->PrepareRead_6(vmsh);
 }
 
 void CHeldItem::QuickRead(VMMDLL_SCATTER_HANDLE vmsh, EPlayerType PlayerType)
@@ -56,6 +102,9 @@ void CHeldItem::QuickRead(VMMDLL_SCATTER_HANDLE vmsh, EPlayerType PlayerType)
 		VMMDLL_Scatter_PrepareEx(vmsh, m_EntityAddress + Offsets::CHandsController::pItem, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HeldItemAddress), reinterpret_cast<DWORD*>(&m_BytesRead));
 	else if (PlayerType == EPlayerType::eObservedPlayer)
 		VMMDLL_Scatter_PrepareEx(vmsh, m_EntityAddress + Offsets::CObservedPlayerHands::pItem, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_HeldItemAddress), reinterpret_cast<DWORD*>(&m_BytesRead));
+
+	if(m_pMagazine)
+		m_pMagazine->QuickRead(vmsh);
 }
 
 void CHeldItem::Finalize()
@@ -63,7 +112,13 @@ void CHeldItem::Finalize()
 	if (m_HeldItem.IsInvalid())
 		SetInvalid();
 
+	if (m_pMagazine && m_pMagazine->IsInvalid())
+		m_pMagazine = nullptr;
+
 	if (IsInvalid()) return;
+
+	if (m_pMagazine)
+		m_pMagazine->Finalize();
 
 	m_HeldItem.Finalize();
 }
@@ -106,6 +161,22 @@ void CHeldItem::CompleteUpdate(EPlayerType PlayerType)
 	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
 
 	PrepareRead_4(vmsh);
+	VMMDLL_Scatter_Execute(vmsh);
+	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
+
+	PrepareRead_5(vmsh);
+	VMMDLL_Scatter_Execute(vmsh);
+	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
+
+	PrepareRead_6(vmsh);
+	VMMDLL_Scatter_Execute(vmsh);
+	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
+
+	PrepareRead_7(vmsh);
+	VMMDLL_Scatter_Execute(vmsh);
+	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
+
+	PrepareRead_8(vmsh);
 	VMMDLL_Scatter_Execute(vmsh);
 	VMMDLL_Scatter_CloseHandle(vmsh);
 

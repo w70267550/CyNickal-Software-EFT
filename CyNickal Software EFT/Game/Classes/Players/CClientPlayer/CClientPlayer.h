@@ -17,6 +17,10 @@ public:
 	void PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh);
 	void PrepareRead_4(VMMDLL_SCATTER_HANDLE vmsh);
 	void PrepareRead_5(VMMDLL_SCATTER_HANDLE vmsh);
+	void PrepareRead_6(VMMDLL_SCATTER_HANDLE vmsh);
+	void PrepareRead_7(VMMDLL_SCATTER_HANDLE vmsh);
+	void PrepareRead_8(VMMDLL_SCATTER_HANDLE vmsh);
+	void PrepareRead_9(VMMDLL_SCATTER_HANDLE vmsh);
 	void QuickRead(VMMDLL_SCATTER_HANDLE vmsh);
 	void Finalize();
 	void QuickFinalize();

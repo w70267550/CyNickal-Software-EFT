@@ -162,6 +162,12 @@
     <ClCompile Include="GUI\Radar\Draw\Radar Exfils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Classes\CMagazine\CMagazine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Fuser\Overlays\Ammo Count\Ammo Count.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -345,6 +351,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game\Enums\EExfilStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Classes\CMagazine\CMagazine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Fuser\Overlays\Ammo Count\Ammo Count.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

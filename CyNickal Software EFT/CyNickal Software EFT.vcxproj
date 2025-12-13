@@ -236,6 +236,7 @@
     </ClCompile>
     <ClCompile Include="Database\Database.cpp" />
     <ClCompile Include="Game\Classes\CExfilPoint\CExfilPoint.cpp" />
+    <ClCompile Include="Game\Classes\CMagazine\CMagazine.cpp" />
     <ClCompile Include="Game\Classes\CItemHash\CItemHash.cpp" />
     <ClCompile Include="DMA\DMA Thread.cpp" />
     <ClCompile Include="DMA\DMA.cpp" />
@@ -260,6 +261,7 @@
     <ClCompile Include="GUI\Aimbot\Aimbot.cpp" />
     <ClCompile Include="GUI\Color Picker\Color Picker.cpp" />
     <ClCompile Include="GUI\Fuser\Draw\Exfils.cpp" />
+    <ClCompile Include="GUI\Fuser\Overlays\Ammo Count\Ammo Count.cpp" />
     <ClCompile Include="GUI\Keybinds\Keybinds.cpp" />
     <ClCompile Include="GUI\Main Menu\Main Menu.cpp" />
     <ClCompile Include="GUI\Fonts\Fonts.cpp" />
@@ -290,6 +292,7 @@
     <ClInclude Include="..\Dependencies\ImGui\imstb_truetype.h" />
     <ClInclude Include="Database\Database.h" />
     <ClInclude Include="Game\Classes\CExfilPoint\CExfilPoint.h" />
+    <ClInclude Include="Game\Classes\CMagazine\CMagazine.h" />
     <ClInclude Include="Game\Classes\CItemHash\CItemHash.h" />
     <ClInclude Include="DMA\DMA Thread.h" />
     <ClInclude Include="DMA\DMA.h" />
@@ -330,6 +333,7 @@
     <ClInclude Include="GUI\Fuser\Draw\Loot.h" />
     <ClInclude Include="GUI\Fuser\Draw\Players.h" />
     <ClInclude Include="GUI\Fuser\Fuser.h" />
+    <ClInclude Include="GUI\Fuser\Overlays\Ammo Count\Ammo Count.h" />
     <ClInclude Include="GUI\Keybinds\Keybinds.h" />
     <ClInclude Include="GUI\Loot Table\Loot Table.h" />
     <ClInclude Include="GUI\Main Menu\Main Menu.h" />

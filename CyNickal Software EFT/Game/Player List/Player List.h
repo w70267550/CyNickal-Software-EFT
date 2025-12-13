@@ -17,6 +17,7 @@ public: /* Interface methods */
 	static void HandlePlayerAllocations(DMA_Connection* Conn);
 	static Vector3 GetLocalPlayerPosition();
 	static Vector3 GetPlayerPosition(uintptr_t m_EntityAddress, EBoneIndex BoneIndex);
+	static CClientPlayer* GetLocalPlayer();
 
 private: /* Private methods */
 	static void GetPlayerAddresses(DMA_Connection* Conn, std::vector<uintptr_t>& OutClientPlayers, std::vector<uintptr_t>& OutObservedPlayers);

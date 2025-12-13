@@ -154,9 +154,6 @@ void Keybinds::Render()
 
 void Keybinds::OnDMAFrame(DMA_Connection* Conn)
 {
-	if (c_keys::IsInitialized() == false)
-		return;
-
 	if (DMARefresh.IsActive(Conn))
 		Conn->FullRefresh();
 
@@ -167,33 +164,16 @@ void Keybinds::OnDMAFrame(DMA_Connection* Conn)
 		Aimbot::OnDMAFrame(Conn);
 }
 
-
 void CKeybind::Render()
 {
-	// Display keybind name
 	ImGui::Text("%s:", m_Name.c_str());
 	ImGui::SameLine();
 
-	// Button to capture key press
 	if (m_bWaitingForKey)
 	{
-		// SAFETY CHECK: Don't scan keys if keyboard not initialized
-		if (!c_keys::IsInitialized())
-		{
-			ImGui::Button(("Initializing...##" + m_Name).c_str());
-			ImGui::SameLine();
-			ImGui::Checkbox(("##Target" + m_Name).c_str(), &m_bTargetPC);
-			ImGui::SameLine();
-			ImGui::Checkbox(("##Radar" + m_Name).c_str(), &m_bRadarPC);
-			return;  // Exit early - don't scan keys yet
-		}
-
 		if (ImGui::Button(("Press any key...##" + m_Name).c_str()))
-		{
 			m_bWaitingForKey = false;
-		}
 
-		// Check for key press using GetAsyncKeyState
 		for (int vk = 0; vk < 256; vk++)
 		{
 			// Skip mouse buttons 1-3 (can interfere with UI)
@@ -212,9 +192,7 @@ void CKeybind::Render()
 	{
 		std::string buttonLabel = std::string(VKCodeToString(m_Key)) + "##" + m_Name;
 		if (ImGui::Button(buttonLabel.c_str()))
-		{
 			m_bWaitingForKey = true;
-		}
 	}
 
 	ImGui::SameLine();

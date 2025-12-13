@@ -90,14 +90,52 @@ void CObservedPlayer::PrepareRead_8(VMMDLL_SCATTER_HANDLE vmsh)
 	m_pHands->PrepareRead_4(vmsh);
 }
 
+void CObservedPlayer::PrepareRead_9(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_9(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_5(vmsh);
+}
+
+void CObservedPlayer::PrepareRead_10(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_10(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_6(vmsh);
+}
+
+void CObservedPlayer::PrepareRead_11(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_11(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_7(vmsh);
+}
+
+void CObservedPlayer::PrepareRead_12(VMMDLL_SCATTER_HANDLE vmsh)
+{
+	CBaseEFTPlayer::PrepareRead_12(vmsh);
+
+	if (IsInvalid())
+		return;
+
+	m_pHands->PrepareRead_8(vmsh);
+}
+
 void CObservedPlayer::Finalize()
 {
 	CBaseEFTPlayer::Finalize();
 
 	if (IsInvalid())
 		return;
-
-	m_pHands->Finalize();
 
 	for (int i = 0; i < 32; i++)
 		m_Voice[i] = static_cast<char>(m_wVoice[i]);
@@ -113,7 +151,8 @@ void CObservedPlayer::QuickRead(VMMDLL_SCATTER_HANDLE vmsh)
 	if (IsInvalid())
 		return;
 
-	m_pHands->QuickRead(vmsh, EPlayerType::eObservedPlayer);
+	if (m_pHands)
+		m_pHands->QuickRead(vmsh, EPlayerType::eObservedPlayer);
 
 	VMMDLL_Scatter_PrepareEx(vmsh, m_HealthControllerAddress + Offsets::CHealthController::HealthStatus, sizeof(uint32_t), reinterpret_cast<BYTE*>(&m_TagStatus), nullptr);
 	VMMDLL_Scatter_PrepareEx(vmsh, m_ObservedMovementStateAddress + Offsets::CObservedMovementState::Rotation, sizeof(float), reinterpret_cast<BYTE*>(&m_Yaw), nullptr);

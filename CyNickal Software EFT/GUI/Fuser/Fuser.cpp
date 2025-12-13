@@ -4,6 +4,7 @@
 #include "Draw/Loot.h"
 #include "Draw/Exfils.h"
 #include "GUI/Aimbot/Aimbot.h"
+#include "Overlays/Ammo Count/Ammo Count.h"
 
 void Fuser::Render()
 {
@@ -19,6 +20,7 @@ void Fuser::Render()
 	DrawESPLoot::DrawAll(WindowPos, DrawList);
 	DrawExfils::DrawAll(WindowPos, DrawList);
 	Aimbot::RenderFOVCircle(WindowPos, DrawList);
+	AmmoCountOverlay::Render();
 
 	ImGui::End();
 	ImGui::PopStyleColor();

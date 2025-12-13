@@ -10,7 +10,7 @@ void PlayerTable::Render()
 	ImGui::Begin("Player Table", &bMasterToggle);
 
 	ImGuiTableFlags TableFlags = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_NoHostExtendX | ImGuiTableFlags_NoBordersInBody;
-	if (ImGui::BeginTable("##Players", 12, TableFlags))
+	if (ImGui::BeginTable("##Players", 13, TableFlags))
 	{
 		ImGui::TableSetupColumn("Address");
 		ImGui::TableSetupColumn("Copy Addr");
@@ -24,6 +24,7 @@ void PlayerTable::Render()
 		ImGui::TableSetupColumn("Weapon");
 		ImGui::TableSetupColumn("Sanitized Weapon");
 		ImGui::TableSetupColumn("Copy JOAAT");
+		ImGui::TableSetupColumn("Ammo");
 		ImGui::TableHeadersRow();
 
 		std::scoped_lock Lock(PlayerList::m_PlayerMutex);
@@ -69,6 +70,11 @@ void PlayerTable::AddRow(const CClientPlayer& Player)
 	ImGui::TableNextColumn();
 	std::string JOAAT = "JOAAT##" + std::to_string(Player.m_EntityAddress);
 	if (ImGui::Button(JOAAT.c_str())) ImGui::SetClipboardText(std::format("0x{0:X}", Player.m_pHands->m_HeldItem.m_ItemHash.GetHash()).c_str());
+	ImGui::TableNextColumn();
+	if(Player.m_pHands && Player.m_pHands->m_pMagazine)
+		ImGui::Text("%d/%d", Player.m_pHands->m_pMagazine->m_CurrentCartridges, Player.m_pHands->m_pMagazine->m_MaxCartridges);
+	else
+		ImGui::Text("N/A");
 }
 
 void PlayerTable::AddRow(const CObservedPlayer& Player)
@@ -104,4 +110,9 @@ void PlayerTable::AddRow(const CObservedPlayer& Player)
 	ImGui::TableNextColumn();
 	std::string JOAAT = "JOAAT##" + std::to_string(Player.m_EntityAddress);
 	if (ImGui::Button(JOAAT.c_str())) ImGui::SetClipboardText(std::format("0x{0:X}", Player.m_pHands->m_HeldItem.m_ItemHash.GetHash()).c_str());
+	ImGui::TableNextColumn();
+	if (Player.m_pHands && Player.m_pHands->m_pMagazine)
+		ImGui::Text("%d/%d", Player.m_pHands->m_pMagazine->m_CurrentCartridges, Player.m_pHands->m_pMagazine->m_MaxCartridges);
+	else
+		ImGui::Text("N/A");
 }

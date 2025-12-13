@@ -40,6 +40,9 @@ void CBaseEFTPlayer::PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh)
 
 void CBaseEFTPlayer::PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh)
 {
+	if (!m_SkeletonRootAddress)
+		SetInvalid();
+
 	if (IsInvalid()) return;
 
 	m_pSkeleton = std::make_unique<CPlayerSkeleton>(m_SkeletonRootAddress);
@@ -101,6 +104,14 @@ void CBaseEFTPlayer::PrepareRead_10(VMMDLL_SCATTER_HANDLE vmsh)
 	m_pSkeleton->PrepareRead_8(vmsh);
 }
 
+void CBaseEFTPlayer::PrepareRead_11(VMMDLL_SCATTER_HANDLE vmsh)
+{
+}
+
+void CBaseEFTPlayer::PrepareRead_12(VMMDLL_SCATTER_HANDLE vmsh)
+{
+}
+
 void CBaseEFTPlayer::Finalize()
 {
 	if (IsInvalid())
@@ -108,6 +119,9 @@ void CBaseEFTPlayer::Finalize()
 
 	if (m_EntityAddress == GOM::GetMainPlayerAddress())
 		SetLocalPlayer();
+
+	if (m_pHands)
+		m_pHands->Finalize();
 
 	m_pSkeleton->Finalize();
 }
@@ -123,6 +137,9 @@ void CBaseEFTPlayer::QuickFinalize()
 {
 	if (IsInvalid())
 		return;
+
+	if(m_pHands)
+		m_pHands->QuickFinalize();
 
 	if (m_pSkeleton)
 		m_pSkeleton->QuickFinalize();

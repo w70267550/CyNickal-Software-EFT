@@ -58,6 +58,18 @@ void PlayerList::ExecuteReadsOnPlayerVec(DMA_Connection* Conn, std::vector<Playe
 	for (auto& Player : Players)
 		std::visit([vmsh](auto& p) { p.PrepareRead_10(vmsh); }, Player);
 	VMMDLL_Scatter_Execute(vmsh);
+	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
+
+	for (auto& Player : Players)
+		std::visit([vmsh](auto& p) { p.PrepareRead_11(vmsh); }, Player);
+	VMMDLL_Scatter_Execute(vmsh);
+	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
+
+	for (auto& Player : Players)
+		std::visit([vmsh](auto& p) { p.PrepareRead_12(vmsh); }, Player);
+	VMMDLL_Scatter_Execute(vmsh);
+	VMMDLL_Scatter_Clear(vmsh, PID, VMMDLL_FLAG_NOCACHE);
+
 	VMMDLL_Scatter_CloseHandle(vmsh);
 
 	for (auto& Player : Players)
@@ -283,22 +295,33 @@ Vector3 PlayerList::GetLocalPlayerPosition()
 
 Vector3 PlayerList::GetPlayerPosition(uintptr_t m_EntityAddress, EBoneIndex BoneIndex)
 {
-	std::scoped_lock Lock(m_PlayerMutex);
-	Vector3 BonePos{};
+	std::scoped_lock Lock(m_PlayerMutex);	
+	return GetLocalPlayer()->GetBonePosition(BoneIndex);
+}
+
+CClientPlayer* PlayerList::GetLocalPlayer()
+{
 	bool bFound{ false };
+	CClientPlayer* pClientPlayer{ nullptr };
 
 	for (auto& Player : m_Players)
 	{
 		std::visit([&](auto& p) {
-			if (p.m_EntityAddress == m_EntityAddress) {
-				bFound = true;
-				BonePos = p.GetBonePosition(BoneIndex);
+			if constexpr (std::is_same_v<decltype(p), CClientPlayer&>)
+			{
+				if (p.IsLocalPlayer())
+				{
+					bFound = true;
+					pClientPlayer = &p;
+				}
 			}
 			}, Player);
 
-		if (bFound)	return BonePos;
+		if (bFound && pClientPlayer)
+			return pClientPlayer;
 	}
-	return BonePos;
+
+	return pClientPlayer;
 }
 
 void PlayerList::AllocatePlayersFromVector(DMA_Connection* Conn, std::vector<uintptr_t> PlayerAddresses, EPlayerType playerType)
