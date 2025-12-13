@@ -11,6 +11,8 @@ public:
 	void PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh);
 	void Finalize();
 
+	const std::string& GetTemplateName(ENameMap map);
+
 public:
 	std::wstring m_wName{ L"" };
 	std::string m_sName{ "" };

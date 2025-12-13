@@ -66,20 +66,20 @@ void DrawESPPlayers::DrawPlayerWeapon(const CHeldItem* pHands, const ImVec2& Win
 	auto& ProjectedRootPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
 	ImVec2 RootScreenPos = { WindowPos.x + ProjectedRootPos.x, WindowPos.y + ProjectedRootPos.y };
 
-	const char* ItemName = pHands->m_pHeldItem->GetSanitizedName();
+	auto ItemName = pHands->m_pHeldItem->GetItemName(ENameMap::Weapons);
 
-	auto TextSize = ImGui::CalcTextSize(HeldItem->GetSanitizedName());
+	auto TextSize = ImGui::CalcTextSize(ItemName.c_str());
 	DrawList->AddText(
 		ImVec2(RootScreenPos.x - (TextSize.x / 2.0f), RootScreenPos.y + (ImGui::GetTextLineHeight() * LineNumber)),
 		ColorPicker::m_WeaponTextColor,
-		HeldItem->GetSanitizedName()
+		ItemName.c_str()
 	);
 	LineNumber++;
 
 	auto& Magazine = pHands->m_pMagazine;
 	if (Magazine == nullptr) return;
 
-	std::string MagText = std::format("{0:d} {1:s}", Magazine->m_CurrentCartridges, Magazine->m_pAmmoItemTemplate->m_sName.c_str());
+	std::string MagText = std::format("{0:d} {1:s}", Magazine->m_CurrentCartridges, Magazine->GetAmmoName().c_str());
 	TextSize = ImGui::CalcTextSize(MagText.c_str());
 	DrawList->AddText(
 		ImVec2(RootScreenPos.x - (TextSize.x / 2.0f), RootScreenPos.y + (ImGui::GetTextLineHeight() * LineNumber)),

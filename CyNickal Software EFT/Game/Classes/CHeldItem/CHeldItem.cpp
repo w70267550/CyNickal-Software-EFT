@@ -155,8 +155,6 @@ void CHeldItem::QuickFinalize()
 
 	m_pHeldItem = std::make_unique<CItem>(m_HeldItemAddress);
 	m_pHeldItem->CompleteUpdate();
-
-	std::println("[CHeldItem] [!] Switched to {}", m_pHeldItem->GetUnfilteredName());
 }
 
 void CHeldItem::CompleteUpdate(EPlayerType PlayerType)

@@ -10,7 +10,7 @@ void PlayerTable::Render()
 	ImGui::Begin("Player Table", &bMasterToggle);
 
 	ImGuiTableFlags TableFlags = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_NoHostExtendX | ImGuiTableFlags_NoBordersInBody;
-	if (ImGui::BeginTable("##Players", 13, TableFlags))
+	if (ImGui::BeginTable("##Players", 14, TableFlags))
 	{
 		ImGui::TableSetupColumn("Address");
 		ImGui::TableSetupColumn("Copy Addr");
@@ -23,8 +23,9 @@ void PlayerTable::Render()
 		ImGui::TableSetupColumn("Tag Status");
 		ImGui::TableSetupColumn("Weapon");
 		ImGui::TableSetupColumn("Sanitized Weapon");
-		ImGui::TableSetupColumn("Copy JOAAT");
+		ImGui::TableSetupColumn("Weapon JOAAT");
 		ImGui::TableSetupColumn("Ammo");
+		ImGui::TableSetupColumn("Ammo JOAAT");
 		ImGui::TableHeadersRow();
 
 		std::scoped_lock Lock(PlayerList::m_PlayerMutex);
@@ -43,20 +44,24 @@ void HandRows(const CBaseEFTPlayer& Player)
 	if (pHands && pHands->IsInvalid() == false)
 	{
 		ImGui::TableNextColumn();
-		ImGui::Text(pHands->m_pHeldItem->GetUnfilteredName());
+		ImGui::Text(pHands->m_pHeldItem->m_pItemTemplate->m_sName.c_str());
 
 		ImGui::TableNextColumn();
-		ImGui::Text(pHands->m_pHeldItem->GetSanitizedName());
+		ImGui::Text(pHands->m_pHeldItem->m_pItemTemplate->GetTemplateName(ENameMap::Weapons).c_str());
 
 		ImGui::TableNextColumn();
-		std::string JOAAT = "JOAAT##" + std::to_string(Player.m_EntityAddress);
+		std::string JOAAT = "JOAAT##Wep" + std::to_string(Player.m_EntityAddress);
 		if (ImGui::Button(JOAAT.c_str()) && pHands) ImGui::SetClipboardText(std::format("0x{0:X}", pHands->m_pHeldItem->m_pItemTemplate->m_pNameHash->GetHash()).c_str());
 
 		ImGui::TableNextColumn();
 		if (pHands->m_pMagazine && pHands->m_pMagazine->IsInvalid() == false)
-			ImGui::Text("%d/%d, %s", pHands->m_pMagazine->m_CurrentCartridges, pHands->m_pMagazine->m_MaxCartridges, pHands->m_pMagazine->m_pAmmoItemTemplate->m_sName.c_str());
+			ImGui::Text("%d/%d, %s", pHands->m_pMagazine->m_CurrentCartridges, pHands->m_pMagazine->m_MaxCartridges, pHands->m_pMagazine->GetAmmoName().c_str());
 		else
 			ImGui::Text("N/A");
+
+		ImGui::TableNextColumn();
+		JOAAT = "JOAAT##Ammo" + std::to_string(Player.m_EntityAddress);
+		if (ImGui::Button(JOAAT.c_str()) && pHands) ImGui::SetClipboardText(std::format("0x{0:X}", pHands->m_pMagazine->m_pAmmoItemTemplate->m_pNameHash->GetHash()).c_str());
 	}
 	else
 	{

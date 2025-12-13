@@ -40,3 +40,12 @@ void CItemTemplate::Finalize()
 
 	std::println("[CItemTemplate] Finalized Template at {0:X} with Name: {1:s}", m_EntityAddress, m_sName.c_str());
 }
+
+const std::string& CItemTemplate::GetTemplateName(ENameMap map)
+{
+	if (m_pNameHash)
+		if (auto result = m_pNameHash->GetSanitizedName(map))
+			return *result;
+
+	return m_sName;
+}

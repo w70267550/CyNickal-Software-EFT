@@ -122,10 +122,10 @@ void CLoot::QuickFinalize()
 		SetInvalid();
 }
 
-const char* CLoot::GetName() const
+const std::string CLoot::GetLootName() const
 {
-	if (m_ItemHash.GetName())
-		return m_ItemHash.GetName();
+	if(auto SanitizedName = m_ItemHash.GetSanitizedName(ENameMap::Loot))
+		return *SanitizedName;
 
 	return m_Name.data();
 }

@@ -18,6 +18,8 @@ public:
 	void QuickRead(VMMDLL_SCATTER_HANDLE vmsh);
 	void QuickFinalize();
 
+	const std::string& GetAmmoName() const;
+
 public:
 	uint32_t m_MaxCartridges{ 0 };
 	uint32_t m_CurrentCartridges{ 0 };

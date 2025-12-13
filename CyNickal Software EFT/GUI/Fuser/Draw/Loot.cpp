@@ -31,9 +31,9 @@ void DrawESPLoot::DrawAll(const ImVec2& WindowPos, ImDrawList* DrawList)
 				continue;
 		}
 
-		const char* ItemName = Loot.GetName();
+		auto ItemName = Loot.GetLootName();
 
-		std::string Text = std::format("{0:s} [{1:.0f}m]", ItemName, Distance);
+		std::string Text = std::format("{0:s} [{1:.0f}m]", ItemName.c_str(), Distance);
 
 		auto TextSize = ImGui::CalcTextSize(Text.c_str());
 

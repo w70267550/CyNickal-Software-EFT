@@ -134,3 +134,12 @@ void CMagazine::QuickFinalize()
 	if (m_BytesRead != sizeof(uint32_t))
 		SetInvalid();
 }
+
+std::string UnknownAmmo = "Unknown Ammo";
+const std::string& CMagazine::GetAmmoName() const
+{
+	if (!m_pAmmoItemTemplate || !m_pAmmoItemTemplate->m_pNameHash)
+		return UnknownAmmo;
+
+	return m_pAmmoItemTemplate->GetTemplateName(ENameMap::Ammo);
+}

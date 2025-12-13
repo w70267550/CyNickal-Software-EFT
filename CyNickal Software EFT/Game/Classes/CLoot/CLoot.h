@@ -19,7 +19,7 @@ public:
 	void Finalize();
 	void QuickFinalize();
 
-	const char* GetName() const;
+	const std::string GetLootName() const;
 	const ImColor GetColor() const;
 	const bool IsValuable() const;
 

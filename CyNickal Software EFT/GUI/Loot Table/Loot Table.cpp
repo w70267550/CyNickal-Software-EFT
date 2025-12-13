@@ -44,9 +44,7 @@ void LootTable::Render()
 			ImGui::TableNextColumn();
 			ImGui::Text("%.0fm", LocalPlayerPos.DistanceTo(Loot.m_Position));
 			ImGui::TableNextColumn();
-			auto ItemName = Loot.GetName();
-			if (ItemName)
-				ImGui::Text(Loot.GetName());
+			ImGui::Text(Loot.GetLootName().c_str());
 			ImGui::TableNextColumn();
 			std::string Joaat = "Copy##" + std::to_string(Loot.m_EntityAddress);
 			if (ImGui::Button(Joaat.c_str()))

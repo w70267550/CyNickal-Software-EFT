@@ -74,8 +74,6 @@ uint32_t JOAAT(T String) {
 	return hash;
 }
 
-#include "Database/Database.h"
-std::string BuiltName{};
 void CItem::Finalize()
 {
 	if (!m_pItemTemplate || m_pItemTemplate->IsInvalid())
@@ -86,19 +84,7 @@ void CItem::Finalize()
 	m_pItemTemplate->Finalize();
 }
 
-const char* CItem::GetUnfilteredName() const
+const std::string& CItem::GetItemName(ENameMap map) const
 {
-	if (m_pItemTemplate)
-		return m_pItemTemplate->m_sName.c_str();
-
-	return "Unknown";
-}
-
-const char* CItem::GetSanitizedName() const
-{
-	if (m_pItemTemplate && m_pItemTemplate->m_pNameHash)
-		if (auto Ret = m_pItemTemplate->m_pNameHash->GetName(); Ret != nullptr)
-			return Ret;
-
-	return "Unknown";
+	return m_pItemTemplate->GetTemplateName(map);
 }

@@ -2,7 +2,7 @@
 
 #include "CNameHash.h"
 
-const std::unordered_map<uint32_t, std::string> gItemNames
+std::unordered_map<uint32_t, std::string> m_WeaponNames
 {
 	{0x0BFA7DBD, "Saiga-12k"},
 	{0x032142AA, "TOZ KS-23M"},
@@ -41,6 +41,7 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0xB2F3D739, "MP9-N"},
 	{0xC4C341F6, "AK-545"},
 	{0x5D2895D3, "Mosin Infantry"},
+	{0x3FA97F0F, "Mosin Infantry"},
 	{0x463C2B8C, "Mosin"},
 	{0xF31A4204, "AKMS"},
 	{0xAED7C176, "PKTM"},
@@ -71,8 +72,27 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x529E1F4F, "VOG"},
 	{0xA0A73DBA, "AKS-74N"},
 	{0x955BAEC7, "KBP 9A-91"},
+	{0xE032A35E, "DVL-10" },
+	{ 0x3E1A7F15, "Zarya" }
+};
 
-	/* Other items */
+std::unordered_map<uint32_t, std::string> m_AmmoNames
+{
+	{0x923f19a4, "Buckshot"},
+	{0x2b3966c4, "TT P gl"},
+	{0x1b69be1e, "BT"},
+	{0x8FB566EC, "PM P gzh"},
+	{0xDF62E382, "Devastator Slug"},
+	{0x7F8CD91, "Poleva-6u Slug"},
+	{0xB0790FD, "Piranha"},
+	{0x3F7A1CF3, "PSO gzh"},
+	{0xD67DC0D4, "M62"},
+	{0xF9D453BD, "HP"},
+	{0xBF84582A, "7BT1"},
+};
+
+std::unordered_map<uint32_t, std::string> m_ItemNames
+{
 	{0x7107CDBF, "Power Cord"},
 	{0x690F712C, "Pliers"},
 	{0xD661A199, "Elite Pliers"},
@@ -97,7 +117,26 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x07CC0C28, "TNT Brick"},
 	{0x6B4F9B4C, "Hose"},
 
-	/* Containers */
+
+	{0x627F6841, "Bitcoin"},
+	{0x281E0D2C, "Golden Egg"},
+	{0x9FDB5E61, "Sledgehammer"},
+	{0x32A54032, "Intelligence"},
+	{0xCDF181D5, "Cat"},
+	{0x2A9827C2, "Parrot"},
+	{0x360C4F1F, "Teapot"},
+	{0x1C8CC38B, "Skullring"},
+	{0xA7D5AD85, "Kunai"},
+	{0x8443B372, "Medallion"},
+	{0xF4FEF1E3, "Lion"},
+	{0x90C1DB5E, "Rolex"},
+	{0x3588C73A, "GP"},
+	{0x8A7E0181, "Vase"},
+	{0x8DAB3325, "Chicken"},
+	{0x2475DDCB, "Raven"},
+	{0xAC48899A, "Badge"},
+
+
 	{0x1D2E27D9, "PC Block"},
 	{0x1D3ADFCA, "Toolbox"},
 	{0xD328FEF6, "Sportbag"},
@@ -121,25 +160,11 @@ const std::unordered_map<uint32_t, std::string> gItemNames
 	{0x3084DB15, "Medcase"},
 };
 
-const std::unordered_map<uint32_t, std::string> gValuables
+std::array<std::unordered_map<uint32_t, std::string>, 3> m_NameMaps
 {
-	{0x627F6841, "Bitcoin"},
-	{0x281E0D2C, "Golden Egg"},
-	{0x9FDB5E61, "Sledgehammer"},
-	{0x32A54032, "Intelligence"},
-	{0xCDF181D5, "Cat"},
-	{0x2A9827C2, "Parrot"},
-	{0x360C4F1F, "Teapot"},
-	{0x1C8CC38B, "Skullring"},
-	{0xA7D5AD85, "Kunai"},
-	{0x8443B372, "Medallion"},
-	{0xF4FEF1E3, "Lion"},
-	{0x90C1DB5E, "Rolex"},
-	{0x3588C73A, "GP"},
-	{0x8A7E0181, "Vase"},
-	{0x8DAB3325, "Chicken"},
-	{0x2475DDCB, "Raven"},
-	{0xAC48899A, "Badge"},
+	m_ItemNames,
+	m_WeaponNames,
+	m_AmmoNames
 };
 
 uint32_t JOAAT(const std::string& String) {
@@ -165,18 +190,20 @@ CNameHash::CNameHash(const std::string& ItemName)
 		std::println("[CItemHash] Generated hash {0:X} for item name {1}", m_Hash, std::string(ItemName.begin(), ItemName.end()).c_str());
 }
 
-const char* CNameHash::GetName() const
-{
-	if (gItemNames.find(m_Hash) != gItemNames.end())
-		return gItemNames.at(m_Hash).c_str();
-
-	if (gValuables.find(m_Hash) != gValuables.end())
-		return gValuables.at(m_Hash).c_str();
-
-	return nullptr;
-}
-
 const bool CNameHash::IsValuable() const
 {
-	return gValuables.find(m_Hash) != gValuables.end();
+	return false;
+	//return m_NameMaps[std::to_underlying(ENameMap::Valuables)].find(m_Hash) != m_NameMaps[std::to_underlying(ENameMap::Valuables)].end();
+}
+
+const std::string* CNameHash::GetSanitizedName(ENameMap map) const
+{
+	auto UnderlyingMap = std::to_underlying(map);
+
+	auto& NameMap = m_NameMaps[UnderlyingMap];
+
+	if (NameMap.find(m_Hash) != NameMap.end())
+		return &NameMap.at(m_Hash);
+
+	return nullptr;
 }

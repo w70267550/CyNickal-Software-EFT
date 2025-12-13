@@ -11,8 +11,8 @@ public:
 	void PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh);
 	void CompleteUpdate();
 	void Finalize();
-	const char* GetUnfilteredName() const;
-	const char* GetSanitizedName() const;
+
+	const std::string& GetItemName(ENameMap map) const;
 
 public:
 	std::unique_ptr<CItemTemplate> m_pItemTemplate{ nullptr };
