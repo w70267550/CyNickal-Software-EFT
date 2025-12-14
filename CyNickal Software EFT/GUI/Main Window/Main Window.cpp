@@ -11,6 +11,7 @@
 #include "GUI/Loot Table/Loot Table.h"
 #include "GUI/Color Picker/Color Picker.h"
 #include "GUI/Keybinds/Keybinds.h"
+#include "GUI/Config/Config.h"
 
 void Render(ImGuiContext* ctx)
 {
@@ -23,9 +24,9 @@ void Render(ImGuiContext* ctx)
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport()->ID, nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
 
-	Radar::Render();
-	Radar::RenderSettings();
 	Fuser::Render();
+
+	Radar::RenderSettings();
 	Fuser::RenderSettings();
 	Aimbot::RenderSettings();
 	PlayerTable::Render();
@@ -33,6 +34,9 @@ void Render(ImGuiContext* ctx)
 	ColorPicker::Render();
 	Keybinds::Render();
 	MainMenu::Render();
+	Config::Render();
+
+	Radar::Render();
 
 	ImGui::PopFont();
 }

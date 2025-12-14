@@ -9,9 +9,8 @@ public:
 
 
 public:
-	static inline bool bMasterToggle{ true };
 	static inline bool bSettings{ true };
-
-private:
+	static inline bool bMasterToggle{ true };
 	static inline ImVec2 m_ScreenSize{ 1920.0f,1080.0f };
+
 };
