@@ -79,6 +79,9 @@ std::unordered_map<uint32_t, std::string> m_WeaponNames
 std::unordered_map<uint32_t, std::string> m_AmmoNames
 {
 	{0x923f19a4, "Buckshot"},
+	{0x40197F32, "Buckshot"},
+	{0x516ED055, "Buckshot"},
+	{0x10BEBCC7, "Slug"},
 	{0x2b3966c4, "TT P gl"},
 	{0x1b69be1e, "BT"},
 	{0x8FB566EC, "PM P gzh"},
@@ -89,6 +92,33 @@ std::unordered_map<uint32_t, std::string> m_AmmoNames
 	{0xD67DC0D4, "M62"},
 	{0xF9D453BD, "HP"},
 	{0xBF84582A, "7BT1"},
+	{0x5E25F12C, "M856"},
+	{0x506855B1, "M855"},
+	{0x5fce4113, "M995"},
+	{0x17F53CF2, "M80"},
+	{0x8369C9CB, "M855A1"},
+	{0xE111DDB2, "M882"},
+	{0x8B6DF6C7, "PS"},
+	{0x1BD7BEF2, "BP"},
+	{0x85ADCFC2, "Flechette"},
+	{0x929E1DD8, "AP 63"},
+	{0x9249F823, "SIG FMJ"},
+	{0xE7AFFE6E, "Grizzly Slug"},
+	{0x70E8F770, "SP"},
+	{0x5C2AD700, "Copper Slug"},
+	{0xE6EE4A6E, "US"},
+	{0x3DCECE9C, "HP"},
+	{0xAB77CE43, "FMJ"},
+	{0x53B2AF25, "FMJ"},
+	{0xC26D8F5F, "Ultra Noiser"},
+	{0xC2A6B027, "T46M"},
+	{0xF8AC0FDB, "T45M"},
+	{0x79524, "TKM FMJ"},
+	{0x1D54FD88, "BZT gzh"},
+	{0xB5BB06B7, "7N1"},
+	{0x366D3F54, "M856A1"},
+	{0xE8E19E6E, "TKM Geksa"},
+	{0xD649E27C, "GT"},
 };
 
 std::unordered_map<uint32_t, std::string> m_ItemNames
@@ -116,25 +146,26 @@ std::unordered_map<uint32_t, std::string> m_ItemNames
 	{0x6BFF0CB3, "Car Battery"},
 	{0x07CC0C28, "TNT Brick"},
 	{0x6B4F9B4C, "Hose"},
-
-
-	{0x627F6841, "Bitcoin"},
-	{0x281E0D2C, "Golden Egg"},
-	{0x9FDB5E61, "Sledgehammer"},
-	{0x32A54032, "Intelligence"},
-	{0xCDF181D5, "Cat"},
-	{0x2A9827C2, "Parrot"},
-	{0x360C4F1F, "Teapot"},
-	{0x1C8CC38B, "Skullring"},
-	{0xA7D5AD85, "Kunai"},
-	{0x8443B372, "Medallion"},
-	{0xF4FEF1E3, "Lion"},
-	{0x90C1DB5E, "Rolex"},
-	{0x3588C73A, "GP"},
-	{0x8A7E0181, "Vase"},
-	{0x8DAB3325, "Chicken"},
-	{0x2475DDCB, "Raven"},
-	{0xAC48899A, "Badge"},
+	{0x35857077, "Marlboro"},
+	{0x35857077, "Wilston"},
+	{0xB8F989D8, "Strike"},
+	{0x51D7E7F1, "Apollo"},
+	{0x8532DCC1, "Gasoline"},
+	{0x625E5BC7, "Screw"},
+	{0xFD18E74F, "Magnet"},
+	{0x37FD69B5, "Relay"},
+	{0x58E2F9CB, "HDD"},
+	{0xA0A48C70, "Modem"},
+	{0xE6DA96F9, "Vitamins"},
+	{0xB42C3AFC, "NaCl"},
+	{0x7104340F, "Kektape"},
+	{0x872007BC, "Helix"},
+	{0x88CF336B, "LCD"},
+	{0xB5CE963B, "Awl"},
+	{0xA53E25C7, "Hand Drill"},
+	{0x441406F3, "Screwdriver"},
+	{0x8C4C4C3C, "Long Screwdriver"},
+	{0xA47716C1, "WD-40"},
 
 
 	{0x1D2E27D9, "PC Block"},
@@ -160,11 +191,35 @@ std::unordered_map<uint32_t, std::string> m_ItemNames
 	{0x3084DB15, "Medcase"},
 };
 
-std::array<std::unordered_map<uint32_t, std::string>, 3> m_NameMaps
+std::unordered_map<uint32_t, std::string> m_Valuables
+{
+	{0x627F6841, "Bitcoin"},
+	{0x281E0D2C, "Golden Egg"},
+	{0x9FDB5E61, "Sledgehammer"},
+	{0x32A54032, "Intelligence"},
+	{0xCDF181D5, "Cat"},
+	{0x2A9827C2, "Parrot"},
+	{0x360C4F1F, "Teapot"},
+	{0x1C8CC38B, "Skullring"},
+	{0xA7D5AD85, "Kunai"},
+	{0x8443B372, "Medallion"},
+	{0xF4FEF1E3, "Lion"},
+	{0x90C1DB5E, "Rolex"},
+	{0x3588C73A, "GP"},
+	{0x8A7E0181, "Vase"},
+	{0x8DAB3325, "Chicken"},
+	{0x2475DDCB, "Raven"},
+	{0xAC48899A, "Badge"},
+	{0x939AFC6E, "Old Firesteel"},
+	{0xCC3E8545, "Defibrillator"},
+};
+
+std::array<std::unordered_map<uint32_t, std::string>, 4> m_NameMaps
 {
 	m_ItemNames,
 	m_WeaponNames,
-	m_AmmoNames
+	m_AmmoNames,
+	m_Valuables
 };
 
 uint32_t JOAAT(const std::string& String) {
@@ -192,8 +247,7 @@ CNameHash::CNameHash(const std::string& ItemName)
 
 const bool CNameHash::IsValuable() const
 {
-	return false;
-	//return m_NameMaps[std::to_underlying(ENameMap::Valuables)].find(m_Hash) != m_NameMaps[std::to_underlying(ENameMap::Valuables)].end();
+	return m_NameMaps[std::to_underlying(ENameMap::Valuables)].find(m_Hash) != m_NameMaps[std::to_underlying(ENameMap::Valuables)].end();
 }
 
 const std::string* CNameHash::GetSanitizedName(ENameMap map) const

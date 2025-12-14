@@ -4,7 +4,8 @@ enum class ENameMap : uint8_t
 {
 	Loot,
 	Weapons,
-	Ammo
+	Ammo,
+	Valuables
 };
 
 class CNameHash

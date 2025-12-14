@@ -127,6 +127,9 @@ const std::string CLoot::GetLootName() const
 	if(auto SanitizedName = m_ItemHash.GetSanitizedName(ENameMap::Loot))
 		return *SanitizedName;
 
+	if(auto SanitizedName = m_ItemHash.GetSanitizedName(ENameMap::Valuables))
+		return *SanitizedName;
+
 	return m_Name.data();
 }
 

@@ -41,7 +41,7 @@ void PlayerTable::Render()
 void HandRows(const CBaseEFTPlayer& Player)
 {
 	auto& pHands = Player.m_pHands;
-	if (pHands && pHands->IsInvalid() == false)
+	if (pHands && pHands->IsInvalid() == false && pHands->m_pHeldItem->IsInvalid() == false)
 	{
 		ImGui::TableNextColumn();
 		ImGui::Text(pHands->m_pHeldItem->m_pItemTemplate->m_sName.c_str());

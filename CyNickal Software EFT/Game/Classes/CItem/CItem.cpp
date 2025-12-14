@@ -84,7 +84,11 @@ void CItem::Finalize()
 	m_pItemTemplate->Finalize();
 }
 
+std::string InvalidItemString = "Invalid Item";
 const std::string& CItem::GetItemName(ENameMap map) const
 {
+	if (IsInvalid() || !m_pItemTemplate)
+		return InvalidItemString;
+
 	return m_pItemTemplate->GetTemplateName(map);
 }
