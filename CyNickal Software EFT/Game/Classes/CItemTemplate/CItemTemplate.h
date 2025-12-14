@@ -14,10 +14,13 @@ public:
 	const std::string& GetTemplateName(ENameMap map);
 
 public:
-	std::wstring m_wName{ L"" };
 	std::string m_sName{ "" };
+	std::string m_sTarkovID{ "" };
 	std::unique_ptr<CNameHash> m_pNameHash{ nullptr };
 
 private:
+	std::array<wchar_t, 64>m_wNameBuffer{};
+	std::array<wchar_t, 24>m_wTarkovIDBuffer{};
 	uintptr_t m_NameAddress{ 0 };
+	uintptr_t m_TarkovIDAddress{ 0 };
 };

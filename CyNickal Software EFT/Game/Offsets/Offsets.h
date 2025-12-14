@@ -182,6 +182,7 @@ namespace Offsets
 	{
 		inline constexpr std::ptrdiff_t pShortName{ 0x18 };
 		inline constexpr std::ptrdiff_t pDescription{ 0x20 };
+		inline constexpr std::ptrdiff_t pTarkovID{ 0xF0 };
 		inline constexpr std::ptrdiff_t pName{ 0xF8 };
 	}
 	namespace CSpawnProfileData

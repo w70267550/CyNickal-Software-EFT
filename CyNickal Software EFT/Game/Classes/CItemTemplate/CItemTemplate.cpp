@@ -6,13 +6,12 @@ CItemTemplate::CItemTemplate(uintptr_t TemplateAddress)
 	: CBaseEntity(TemplateAddress)
 {
 	std::println("[CItemTemplate] Constructed at {:X}", TemplateAddress);
-
-	m_wName.resize(64);
 }
 
 void CItemTemplate::PrepareRead_1(VMMDLL_SCATTER_HANDLE vmsh)
 {
 	VMMDLL_Scatter_PrepareEx(vmsh, m_EntityAddress + Offsets::CItemTemplate::pName, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_NameAddress), reinterpret_cast<DWORD*>(&m_BytesRead));
+	VMMDLL_Scatter_PrepareEx(vmsh, m_EntityAddress + Offsets::CItemTemplate::pTarkovID, sizeof(uintptr_t), reinterpret_cast<BYTE*>(&m_TarkovIDAddress), nullptr);
 }
 
 void CItemTemplate::PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh)
@@ -23,22 +22,28 @@ void CItemTemplate::PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh)
 	if (!m_NameAddress)
 		SetInvalid();
 
-	if (IsInvalid()) return;
-
-	VMMDLL_Scatter_PrepareEx(vmsh, m_NameAddress + 0x14, m_wName.size() * sizeof(wchar_t), reinterpret_cast<BYTE*>(m_wName.data()), reinterpret_cast<DWORD*>(&m_BytesRead));
-}
-
-void CItemTemplate::Finalize()
-{
-	if (m_BytesRead != m_wName.size() * sizeof(wchar_t))
+	if (!m_TarkovIDAddress)
 		SetInvalid();
 
 	if (IsInvalid()) return;
 
-	m_sName = std::string(m_wName.begin(), m_wName.end());
+	VMMDLL_Scatter_PrepareEx(vmsh, m_NameAddress + 0x14, sizeof(m_wNameBuffer), reinterpret_cast<BYTE*>(m_wNameBuffer.data()), reinterpret_cast<DWORD*>(&m_BytesRead));
+	VMMDLL_Scatter_PrepareEx(vmsh, m_TarkovIDAddress + 0x14, sizeof(m_wTarkovIDBuffer), reinterpret_cast<BYTE*>(m_wTarkovIDBuffer.data()), nullptr);
+}
+
+void CItemTemplate::Finalize()
+{
+	if (m_BytesRead != sizeof(m_wNameBuffer))
+		SetInvalid();
+
+	if (IsInvalid()) return;
+
+	m_sName = std::string(m_wNameBuffer.begin(), m_wNameBuffer.end());
 	m_pNameHash = std::make_unique<CNameHash>(m_sName);
 
-	std::println("[CItemTemplate] Finalized Template at {0:X} with Name: {1:s}", m_EntityAddress, m_sName.c_str());
+	m_sTarkovID = std::string(m_wTarkovIDBuffer.begin(), m_wTarkovIDBuffer.end());
+
+	std::println("[CItemTemplate] Finalized Template at {0:X} with Name: {1:s} and EFTID {2:s}", m_EntityAddress, m_sName.c_str(), m_sTarkovID.c_str());
 }
 
 const std::string& CItemTemplate::GetTemplateName(ENameMap map)

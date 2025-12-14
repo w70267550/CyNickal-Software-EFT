@@ -73,7 +73,15 @@ std::unordered_map<uint32_t, std::string> m_WeaponNames
 	{0xA0A73DBA, "AKS-74N"},
 	{0x955BAEC7, "KBP 9A-91"},
 	{0xE032A35E, "DVL-10" },
-	{ 0x3E1A7F15, "Zarya" }
+	{ 0x3E1A7F15, "Zarya" },
+	{ 0x9F3D9DD7, "MP5K" },
+	{ 0xAE6E252, "STM-9" },
+	{ 0xA9589FB0, "AK-74N" },
+	{ 0xCA37451C, "AKS-74UB" },
+	{ 0x8FC73C19, "Remington 870" },
+	{ 0xBBD3128F, "ASh-12" },
+	{ 0x39A305FF, "VPO-136 Vepr" },
+	{ 0x462B2E29, "Vepr-Hunter" },
 };
 
 std::unordered_map<uint32_t, std::string> m_AmmoNames
@@ -119,6 +127,9 @@ std::unordered_map<uint32_t, std::string> m_AmmoNames
 	{0x366D3F54, "M856A1"},
 	{0xE8E19E6E, "TKM Geksa"},
 	{0xD649E27C, "GT"},
+	{0x73809C75, "TKM EKO"},
+	{0x5AAC89AE, "BPZ FMJ"},
+	{0xE8683D4E, "TPZ SP"},
 };
 
 std::unordered_map<uint32_t, std::string> m_ItemNames
