@@ -1,12 +1,11 @@
 #pragma once
 #include "Game/Classes/CBaseEntity/CBaseEntity.h"
 #include "Game/Classes/CUnityTransform/CUnityTransform.h"
-#include "Game/Classes/CNameHash/CNameHash.h"
 
-class CLoot : public CBaseEntity
+class CBaseLootItem : public CBaseEntity
 {
 public:
-	CLoot(uintptr_t LootAddress);
+	CBaseLootItem(uintptr_t EntityAddress);
 	void PrepareRead_1(VMMDLL_SCATTER_HANDLE vmsh);
 	void PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh);
 	void PrepareRead_3(VMMDLL_SCATTER_HANDLE vmsh);
@@ -15,26 +14,17 @@ public:
 	void PrepareRead_6(VMMDLL_SCATTER_HANDLE vmsh);
 	void PrepareRead_7(VMMDLL_SCATTER_HANDLE vmsh);
 	void PrepareRead_8(VMMDLL_SCATTER_HANDLE vmsh);
-	void QuickRead(VMMDLL_SCATTER_HANDLE vmsh);
 	void Finalize();
+	void QuickRead(VMMDLL_SCATTER_HANDLE vmsh);
 	void QuickFinalize();
 
-	const std::string GetLootName() const;
-	const ImColor GetColor() const;
-	const bool IsValuable() const;
-
 public:
-	std::array<char, 64> m_Name{};
 	Vector3 m_Position{};
-	CNameHash m_ItemHash{ "" };
 
 private:
-	CUnityTransform m_Transform{ 0x0 };
-	uintptr_t m_DerefAddress{ 0 };
+	std::unique_ptr<CUnityTransform> m_pTransform{ nullptr };
 	uintptr_t m_MonoBehaviorAddress{ 0 };
 	uintptr_t m_GameObjectAddress{ 0 };
-	uintptr_t m_NameAddress{ 0 };
-	uintptr_t m_ComponentAddress{ 0 };
+	uintptr_t m_ComponentsAddress{ 0 };
 	uintptr_t m_TransformAddress{ 0 };
-	bool m_bIsValuable{ false };
 };

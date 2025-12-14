@@ -14,6 +14,7 @@ void ColorPicker::Render()
 	MyColorPicker("Player Scav Color", m_PlayerScavColor);
 	MyColorPicker("Local Player Color", m_LocalPlayerColor);
 	MyColorPicker("Loot Color", m_LootColor);
+	MyColorPicker("Container Color", m_ContainerColor);
 	MyColorPicker("Valuable Loot Color", m_ValuableLootColor);
 	MyColorPicker("Exfil Color", m_ExfilColor);
 	MyColorPicker("Weapon Text Color", m_WeaponTextColor);

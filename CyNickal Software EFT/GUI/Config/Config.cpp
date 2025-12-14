@@ -192,7 +192,11 @@ json Config::SerializeConfig() {
 
 		{"Loot", {
 			{"bMasterToggle", DrawESPLoot::bMasterToggle},
-			{"fMaxDistance", DrawESPLoot::fMaxDistance}
+			{"bContainerToggle", DrawESPLoot::bContainerToggle},
+			{"bItemToggle", DrawESPLoot::bItemToggle},
+			{"fMaxItemDistance", DrawESPLoot::fMaxItemDistance},
+			{"fMaxContainerDistance", DrawESPLoot::fMaxContainerDistance},
+			{"m_MinItemPrice", DrawESPLoot::m_MinItemPrice}
 		}},
 
 		{"Exfils", {
@@ -225,6 +229,7 @@ json Config::SerializeConfig() {
 		{"m_LocalPlayerColor", static_cast<uint32_t>(ColorPicker::m_LocalPlayerColor)},
 		{"m_BossColor", static_cast<uint32_t>(ColorPicker::m_BossColor)},
 		{"m_LootColor", static_cast<uint32_t>(ColorPicker::m_LootColor)},
+		{"m_ContainerColor", static_cast<uint32_t>(ColorPicker::m_ContainerColor)},
 		{"m_ValuableLootColor", static_cast<uint32_t>(ColorPicker::m_ValuableLootColor)},
 		{"m_ExfilColor", static_cast<uint32_t>(ColorPicker::m_ExfilColor)},
 
@@ -304,8 +309,20 @@ void Config::DeserializeConfig(const json& j) {
 			if (LootTable.contains("bMasterToggle")) {
 				DrawESPLoot::bMasterToggle = LootTable["bMasterToggle"].get<bool>();
 			}
-			if (LootTable.contains("fMaxDistance")) {
-				DrawESPLoot::fMaxDistance = LootTable["fMaxDistance"].get<float>();
+			if (LootTable.contains("bItemToggle")) {
+				DrawESPLoot::bItemToggle = LootTable["bItemToggle"].get<bool>();
+			}
+			if (LootTable.contains("bContainerToggle")) {
+				DrawESPLoot::bContainerToggle = LootTable["bContainerToggle"].get<bool>();
+			}
+			if (LootTable.contains("fMaxContainerDistance")) {
+				DrawESPLoot::fMaxContainerDistance = LootTable["fMaxContainerDistance"].get<float>();
+			}
+			if (LootTable.contains("fMaxItemDistance")) {
+				DrawESPLoot::fMaxItemDistance = LootTable["fMaxItemDistance"].get<float>();
+			}
+			if (LootTable.contains("m_MinItemPrice")) {
+				DrawESPLoot::m_MinItemPrice = LootTable["m_MinItemPrice"].get<int32_t>();
 			}
 		}
 
@@ -378,6 +395,9 @@ void Config::DeserializeConfig(const json& j) {
 		}
 		if (colorsTable.contains("m_LootColor")) {
 			ColorPicker::m_LootColor = colorsTable["m_LootColor"].get<ImU32>();
+		}
+		if (colorsTable.contains("m_ContainerColor")) {
+			ColorPicker::m_ContainerColor = colorsTable["m_ContainerColor"].get<ImU32>();
 		}
 		if (colorsTable.contains("m_ValuableLootColor")) {
 			ColorPicker::m_ValuableLootColor = colorsTable["m_ValuableLootColor"].get<ImU32>();

@@ -13,34 +13,73 @@ void DrawESPLoot::DrawAll(const ImVec2& WindowPos, ImDrawList* DrawList)
 
 	auto LocalPlayerPos = PlayerList::GetLocalPlayerPosition();
 
-	Vector2 ScreenPos{};
 	for (auto& Loot : LootList::m_LootList)
-	{
-		if (Loot.IsInvalid()) continue;
+		std::visit([&](auto& Loot) { DrawLoot(Loot, DrawList, WindowPos, LocalPlayerPos);  }, Loot);
+}
 
-		if (!Camera::WorldToScreen(Loot.m_Position, ScreenPos))	continue;
+void DrawESPLoot::DrawSettings()
+{
+	ImGui::Checkbox("Containers", &bContainerToggle);
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-FLT_MIN);
+	ImGui::InputFloat("##LootContainerMaxDistance", &fMaxContainerDistance);
 
-		float Distance = LocalPlayerPos.DistanceTo(Loot.m_Position);
+	ImGui::Checkbox("Items", &bItemToggle);
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-FLT_MIN);
+	ImGui::InputFloat("##LootItemMaxDistance", &fMaxItemDistance);
+	ImGui::InputScalar("Min Item Price", ImGuiDataType_S32, &m_MinItemPrice);
+}
 
-		if (Loot.IsValuable() == false)
-		{
-			if (Distance > fMaxDistance)
-				continue;
+void DrawESPLoot::DrawLoot(CObservedLootItem& Item, ImDrawList* DrawList, ImVec2 WindowPos, Vector3 LocalPlayerPos)
+{
+	if (!bItemToggle) return;
 
-			if (m_LootFilter.IsActive() && !m_LootFilter.PassFilter(Loot.m_Name.data()))
-				continue;
-		}
+	if (Item.IsInvalid()) return;
 
-		auto ItemName = Loot.GetLootName();
+	if (m_MinItemPrice > 0 && Item.GetItemPrice() < m_MinItemPrice)
+		return;
 
-		std::string Text = std::format("{0:s} [{1:.0f}m]", ItemName.c_str(), Distance);
+	Vector2 ScreenPos{};
+	if (!Camera::WorldToScreen(Item.m_Position, ScreenPos))	return;
 
-		auto TextSize = ImGui::CalcTextSize(Text.c_str());
+	auto Distance = LocalPlayerPos.DistanceTo(Item.m_Position);
 
-		DrawList->AddText(
-			ImVec2(WindowPos.x + ScreenPos.x - (TextSize.x / 2.0f), WindowPos.y + ScreenPos.y),
-			Loot.GetColor(),
-			Text.c_str()
-		);
-	}
+	if (Distance > fMaxItemDistance)
+		return;
+
+	std::string DisplayString = std::format("{0:s} ({1:d}) [{2:.0f}m]", Item.GetName().c_str(), Item.GetItemPrice(), Distance);
+
+	auto TextSize = ImGui::CalcTextSize(DisplayString.c_str());
+
+	DrawList->AddText(
+		ImVec2(WindowPos.x + ScreenPos.x - (TextSize.x / 2.0f), WindowPos.y + ScreenPos.y - 10.0f - TextSize.y),
+		ColorPicker::m_LootColor,
+		DisplayString.c_str()
+	);
+}
+
+void DrawESPLoot::DrawLoot(CLootableContainer& Container, ImDrawList* DrawList, ImVec2 WindowPos, Vector3 LocalPlayerPos)
+{
+	if (!bContainerToggle) return;
+
+	if (Container.IsInvalid()) return;
+
+	Vector2 ScreenPos{};
+	if (!Camera::WorldToScreen(Container.m_Position, ScreenPos))	return;
+
+	auto Distance = LocalPlayerPos.DistanceTo(Container.m_Position);
+
+	if (Distance > fMaxContainerDistance)
+		return;
+
+	std::string DisplayString = std::format("Container [{0:.0f}m]", Distance);
+
+	auto TextSize = ImGui::CalcTextSize(DisplayString.c_str());
+
+	DrawList->AddText(
+		ImVec2(WindowPos.x + ScreenPos.x - (TextSize.x / 2.0f), WindowPos.y + ScreenPos.y - 10.0f - TextSize.y),
+		ColorPicker::m_ContainerColor,
+		DisplayString.c_str()
+	);
 }

@@ -222,4 +222,15 @@ namespace Offsets
 	{
 		inline constexpr std::ptrdiff_t pItem{ 0x58 };
 	}
+
+	namespace CMonoBehavior
+	{
+		inline constexpr std::ptrdiff_t pGameObject{ 0x58 };
+	}
+
+	/* EFT.Interactive::LootItem */
+	namespace CLootItem
+	{
+		inline constexpr std::ptrdiff_t pTemplateID{ 0x80 };
+	}
 };

@@ -111,9 +111,6 @@
     <ClCompile Include="Game\Loot List\Loot List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Classes\CLoot\CLoot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\Fuser\Draw\Loot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -172,6 +169,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Config\Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Classes\CObservedLootItem\CObservedLootItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Classes\CLootableContainer\CLootableContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Classes\CBaseLootItem\CBaseLootItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -302,9 +308,6 @@
     <ClInclude Include="Game\Loot List\Loot List.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Classes\CLoot\CLoot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\Fuser\Draw\Loot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -369,6 +372,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Config\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Classes\CLootableContainer\CLootableContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Classes\CObservedLootItem\CObservedLootItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Classes\CBaseLootItem\CBaseLootItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

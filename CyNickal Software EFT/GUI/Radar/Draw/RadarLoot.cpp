@@ -9,7 +9,7 @@
 
 void DrawRadarLoot::DrawAll(const ImVec2& WindowPos, const ImVec2& WindowSize, ImDrawList* DrawList)
 {
-	if (!bMasterToggle) return;
+	/*if (!bMasterToggle) return;
 
 	std::scoped_lock lk(LootList::m_LootMutex);
 
@@ -24,5 +24,5 @@ void DrawRadarLoot::DrawAll(const ImVec2& WindowPos, const ImVec2& WindowSize, I
 		Delta.z *= Radar::fScale;
 		ImVec2 DotPosition = ImVec2(WindowPos.x + (WindowSize.x / 2) + Delta.z, WindowPos.y + (WindowSize.y / 2) + Delta.x);
 		DrawList->AddCircleFilled(DotPosition, Radar::fEntityRadius, Loot.GetColor());
-	}
+	}*/
 }
