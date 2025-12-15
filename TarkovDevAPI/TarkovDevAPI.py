@@ -44,6 +44,7 @@ def UpdateItemTable():
 
     con.commit();
     con.close();
+    return;
 
 ContainerQuery = """
 {
@@ -64,3 +65,28 @@ def UpdateContainerTable():
 
     con.commit();
     con.close();
+    return;
+
+AmmoQuery ="""
+{
+  ammo {
+    item {
+      id
+      shortName
+    }
+  }
+}
+"""
+def UpdateAmmoTable():
+    result = run_query(AmmoQuery);
+
+    con = sqlite3.connect('../CyNickal Software EFT/EFT_Data.db');
+    cur = con.cursor();
+
+    for Item in result['data']['ammo']:
+         cur.execute("INSERT OR IGNORE INTO ammo_data (bsg_id, short_name) VALUES (?, ?)", (Item['item']['id'], Item['item']['shortName']));
+
+    con.commit();
+    con.close();
+    return;
+UpdateAmmoTable();

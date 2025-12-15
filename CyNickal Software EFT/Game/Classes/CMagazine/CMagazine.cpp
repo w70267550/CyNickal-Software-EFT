@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CMagazine.h"
 #include "Game/Offsets/Offsets.h"
+#include "Database/Database.h"
 
 CMagazine::CMagazine(uintptr_t MagazineSlotAddress) : CBaseEntity(MagazineSlotAddress)
 {
@@ -120,6 +121,9 @@ void CMagazine::Finalize()
 
 	m_pMagazineItemTemplate->Finalize();
 	m_pAmmoItemTemplate->Finalize();
+	m_AmmoName = TarkovAmmoData::GetNameOfAmmo(m_pAmmoItemTemplate->m_sTarkovID);
+
+	std::println("[CMagazine] Finalized Magazine: {0:s} x {1:d}", m_AmmoName.c_str(), m_CurrentCartridges);
 }
 
 void CMagazine::QuickRead(VMMDLL_SCATTER_HANDLE vmsh)
@@ -135,11 +139,7 @@ void CMagazine::QuickFinalize()
 		SetInvalid();
 }
 
-std::string UnknownAmmo = "Unknown Ammo";
 const std::string& CMagazine::GetAmmoName() const
 {
-	if (!m_pAmmoItemTemplate || !m_pAmmoItemTemplate->m_pNameHash)
-		return UnknownAmmo;
-
-	return m_pAmmoItemTemplate->GetTemplateName(ENameMap::Ammo);
+	return m_AmmoName;
 }

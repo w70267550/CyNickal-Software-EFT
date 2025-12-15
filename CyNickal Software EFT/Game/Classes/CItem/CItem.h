@@ -12,11 +12,12 @@ public:
 	void CompleteUpdate();
 	void Finalize();
 
-	const std::string& GetItemName(ENameMap map) const;
+	const std::string& GetItemName() const;
 
 public:
 	std::unique_ptr<CItemTemplate> m_pItemTemplate{ nullptr };
 
 private:
+	std::string m_ItemName{ "" };
 	uintptr_t m_ItemTemplateAddress{ 0 };
 };

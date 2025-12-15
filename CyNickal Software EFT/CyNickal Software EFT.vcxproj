@@ -241,7 +241,6 @@
     <ClCompile Include="Game\Classes\CLootableContainer\CLootableContainer.cpp" />
     <ClCompile Include="Game\Classes\CObservedLootItem\CObservedLootItem.cpp" />
     <ClCompile Include="Game\Classes\CMagazine\CMagazine.cpp" />
-    <ClCompile Include="Game\Classes\CNameHash\CNameHash.cpp" />
     <ClCompile Include="DMA\DMA Thread.cpp" />
     <ClCompile Include="DMA\DMA.cpp" />
     <ClCompile Include="DMA\Input Manager.cpp" />
@@ -301,7 +300,6 @@
     <ClInclude Include="Game\Classes\CLootableContainer\CLootableContainer.h" />
     <ClInclude Include="Game\Classes\CObservedLootItem\CObservedLootItem.h" />
     <ClInclude Include="Game\Classes\CMagazine\CMagazine.h" />
-    <ClInclude Include="Game\Classes\CNameHash\CNameHash.h" />
     <ClInclude Include="DMA\DMA Thread.h" />
     <ClInclude Include="DMA\DMA.h" />
     <ClInclude Include="DMA\Input Manager.h" />

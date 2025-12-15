@@ -28,6 +28,7 @@ public:
 	std::unique_ptr<CItemTemplate> m_pAmmoItemTemplate{ nullptr };
 
 private:
+	std::string m_AmmoName{ "" };
 	uintptr_t m_ContainedItemAddress{ 0 };
 	uintptr_t m_MagazineCartridgesAddress{ 0 };
 	uintptr_t m_StackItemsAddress{ 0 };

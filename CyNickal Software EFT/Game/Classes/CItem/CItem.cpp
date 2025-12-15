@@ -3,6 +3,7 @@
 #include "Game/Offsets/Offsets.h"
 #include "DMA/DMA.h"
 #include "Game/EFT.h"
+#include "Database/Database.h"
 
 CItem::CItem(uintptr_t EntityAddress) : CBaseEntity(EntityAddress)
 {
@@ -82,13 +83,11 @@ void CItem::Finalize()
 	if (IsInvalid()) return;
 
 	m_pItemTemplate->Finalize();
+
+	m_ItemName = TarkovItemData::GetShortNameOfItem(m_pItemTemplate->m_sTarkovID);
 }
 
-std::string InvalidItemString = "Invalid Item";
-const std::string& CItem::GetItemName(ENameMap map) const
+const std::string& CItem::GetItemName() const
 {
-	if (IsInvalid() || !m_pItemTemplate)
-		return InvalidItemString;
-
-	return m_pItemTemplate->GetTemplateName(map);
+	return m_ItemName; 
 }

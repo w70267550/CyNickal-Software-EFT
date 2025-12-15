@@ -39,18 +39,7 @@ void CItemTemplate::Finalize()
 	if (IsInvalid()) return;
 
 	m_sName = std::string(m_wNameBuffer.begin(), m_wNameBuffer.end());
-	m_pNameHash = std::make_unique<CNameHash>(m_sName);
-
 	m_sTarkovID = std::string(m_wTarkovIDBuffer.begin(), m_wTarkovIDBuffer.end());
 
 	std::println("[CItemTemplate] Finalized Template at {0:X} with Name: {1:s} and EFTID {2:s}", m_EntityAddress, m_sName.c_str(), m_sTarkovID.c_str());
-}
-
-const std::string& CItemTemplate::GetTemplateName(ENameMap map)
-{
-	if (m_pNameHash)
-		if (auto result = m_pNameHash->GetSanitizedName(map))
-			return *result;
-
-	return m_sName;
 }

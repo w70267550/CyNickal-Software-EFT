@@ -141,9 +141,6 @@
     <ClCompile Include="..\Dependencies\sqlite\sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Classes\CNameHash\CNameHash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\Keybinds\Keybinds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -339,9 +336,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Database\Database.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Classes\CNameHash\CNameHash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Keybinds\Keybinds.h">

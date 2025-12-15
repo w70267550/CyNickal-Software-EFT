@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Game/Classes/CBaseEntity/CBaseEntity.h"
-#include "Game/Classes/CNameHash/CNameHash.h"
 
 class CItemTemplate : public CBaseEntity
 {
@@ -11,12 +10,9 @@ public:
 	void PrepareRead_2(VMMDLL_SCATTER_HANDLE vmsh);
 	void Finalize();
 
-	const std::string& GetTemplateName(ENameMap map);
-
 public:
 	std::string m_sName{ "" };
 	std::string m_sTarkovID{ "" };
-	std::unique_ptr<CNameHash> m_pNameHash{ nullptr };
 
 private:
 	std::array<wchar_t, 64>m_wNameBuffer{};

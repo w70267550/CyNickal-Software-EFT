@@ -66,7 +66,7 @@ void DrawESPPlayers::DrawPlayerWeapon(const CHeldItem* pHands, const ImVec2& Win
 	auto& ProjectedRootPos = m_ProjectedBoneCache[Sketon_MyIndicies[EBoneIndex::Root]];
 	ImVec2 RootScreenPos = { WindowPos.x + ProjectedRootPos.ScreenPos.x, WindowPos.y + ProjectedRootPos.ScreenPos.y };
 
-	auto ItemName = pHands->m_pHeldItem->GetItemName(ENameMap::Weapons);
+	auto ItemName = pHands->m_pHeldItem->GetItemName();
 
 	auto TextSize = ImGui::CalcTextSize(ItemName.c_str());
 	DrawList->AddText(

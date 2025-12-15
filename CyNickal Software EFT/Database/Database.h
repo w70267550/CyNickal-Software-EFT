@@ -70,3 +70,25 @@ public:
 		return name;
 	}
 };
+
+class TarkovAmmoData
+{
+public:
+	static std::string GetNameOfAmmo(const std::string& ammo_id)
+	{
+		std::println("[TarkovAmmoData] Getting name of ammo with ID: {0}", ammo_id.c_str());
+		auto db = Database::GetTarkovDB();
+		const char* QueryStatement = "SELECT short_name FROM ammo_data WHERE bsg_id = ?;";
+		sqlite3_stmt* stmt{ nullptr };
+		sqlite3_prepare_v2(db, QueryStatement, -1, &stmt, nullptr);
+		sqlite3_bind_text(stmt, 1, ammo_id.c_str(), -1, SQLITE_STATIC);
+		std::string name;
+		if (sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			const unsigned char* text = sqlite3_column_text(stmt, 0);
+			name = std::string(reinterpret_cast<const char*>(text));
+		}
+		sqlite3_finalize(stmt);
+		return name;
+	}
+};
